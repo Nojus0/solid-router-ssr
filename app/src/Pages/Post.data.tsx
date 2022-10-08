@@ -22,7 +22,7 @@ export default function PostData(route: RouteDataFuncArgs) {
             return cached
         }
 
-        const NavigateResponse = await fetch(`/post/${id}?client_navigate=1`)
+        const NavigateResponse = await fetch(`/post/${id}.props.json`)
         const NavigateProps = await NavigateResponse.json()
         const Props = NavigateProps.props
 

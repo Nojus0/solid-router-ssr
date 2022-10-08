@@ -42,8 +42,14 @@ const testArticles: IFullPost[] = [
 ]
 
 app.use("/post/:id", async (req, res) => {
-    const isClientNavigate = req.query.client_navigate
+
+    const isClientNavigate = req.params.id.endsWith(".props.json")
+
+    if (isClientNavigate)
+        req.params.id = req.params.id.slice(0, req.params.id.length - ".props.json".length)
+
     const ID = req.params.id
+
     if (!ID) return res.status(404).send()
     const Post = testArticles.find(where => where.id == ID)
     if (!Post) return res.status(404).send()
@@ -64,9 +70,14 @@ app.use("/post/:id", async (req, res) => {
 })
 
 
-app.use(/\/$/i, async (req, res) => {
+app.use(["/:after", "/$"], async (req, res) => {
 
-    const isClientNavigate = req.query.client_navigate
+    const isClientNavigate = req.params.after == ".props.json"
+
+    // If isn't props and is defined something else
+    if (req.params.after != ".props.json" && req.params.after != undefined) {
+        return res.status(404).send()
+    }
 
     const props = {
         props: testArticles
