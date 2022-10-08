@@ -2,7 +2,6 @@ import {createResource} from "solid-js";
 import {RouteDataFuncArgs} from "solid-app-router";
 import {isServer} from "solid-js/web";
 import {useHydration} from "../HydrationContext";
-import * as path from "path";
 
 
 export default function HomeData(route: RouteDataFuncArgs) {
@@ -25,7 +24,6 @@ export default function HomeData(route: RouteDataFuncArgs) {
         const NavigateProps = await NavigateResponse.json()
         const Props = NavigateProps.props
         ctx.routeCache.set(pathname, Props)
-        console.log(ctx.routeCache)
         return Props
     });
 

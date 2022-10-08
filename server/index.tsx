@@ -26,8 +26,21 @@ const testArticles: IFullPost[] = [
         title: "How to make static go fast",
         description: "Statis or ssr?",
         html: "Awesome",
+    },
+    {
+        id: "best-framework",
+        title: "The best javascript framework is any templating engine",
+        description: "It's hard to believe isn't it",
+        html: `
+<div>
+    <h1>Header h1</h1>
+    <h2>This is very real</h2>
+    <p>This is <b>BOLD</b></p>
+</div>
+`
     }
 ]
+
 app.use("/post/:id", async (req, res) => {
     const isClientNavigate = req.query.client_navigate
     const ID = req.params.id
@@ -69,6 +82,7 @@ app.use(/\/$/i, async (req, res) => {
 
     res.status(200).send(html)
 });
+
 console.log(`Started on http://localhost`)
 app.listen(80)
 

@@ -24,7 +24,6 @@ export function HydrationProvider(p: IHydrationData & { children: any }) {
                 [Json.url, Json.props]
             ])
         }
-        console.log(value.routeCache)
         return (
             <HydrationContext.Provider value={value}>
                 {p.children}

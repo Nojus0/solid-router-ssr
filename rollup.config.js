@@ -5,14 +5,17 @@ import terser from "rollup-plugin-terser";
 import copy from "rollup-plugin-copy";
 import jsonPlugin from "@rollup/plugin-json"
 import fs from "fs"
+import path from "path";
 
 const extensions = [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"];
 
-const IsProd = process.env.NODE_ENV == 'PROD'
+const IsProd = process.env.NODE_ENV === 'PROD'
 
 try {
-    fs.rmdirSync(".output")
+    fs.rmSync(path.join(__dirname, ".output"), {recursive: true})
+    console.log("Removed .output")
 } catch (err) {
+    // console.log(err)
 }
 
 export default [

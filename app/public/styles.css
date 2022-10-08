@@ -3,3 +3,7 @@
     box-sizing: border-box;
     user-select: none;
 }
+
+body {
+    margin: 3rem;
+}

@@ -1,34 +1,31 @@
 import {lazy, Suspense,} from "solid-js";
-import {HydrationScript, isServer, NoHydration} from "solid-js/web";
-import {Router, Routes, Route} from "solid-app-router"
+import {Route, Router, Routes} from "solid-app-router"
 import HomeData from "./Pages/Home.data";
 import PostData from "./Pages/Post.data";
 import {HydrationProvider, useHydration} from "./HydrationContext";
+import {MetaProvider, renderTags} from "@solidjs/meta"
+import {Assets, HydrationScript, isServer, NoHydration} from "solid-js/web";
+import Home from "./Pages/Home";
+import Post from "./Pages/Post";
 
 export interface IHydrationData {
     url: string
     props: any
 }
 
-const HomePage = lazy(() => import("./Pages/Home"))
-const PostPage = lazy(() => import("./Pages/Post"))
+/**
+ * Checking isServer to prevent code splitting on the server, not needed unless you have large or a ton of routes
+ */
+const HomePage = isServer ? Home : lazy(() => import("./Pages/Home"))
+const PostPage = isServer ? Post : lazy(() => import("./Pages/Post"))
 
 function Entrypoint() {
 
     const ctx = useHydration()
-    console.log(`Render Entrypoint`)
-    return (
-        <html lang="en">
-        <head>
-            <title>TODO: Title</title>
-            <meta charset="UTF-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            <link rel="stylesheet" href="https://unpkg.com/98.css"></link>
-            <link rel="stylesheet" href="/styles.css"></link>
-            <HydrationScript/>
-        </head>
-        <body>
-        <div id="app">
+    const tags: any[] = []
+
+    const App = (
+        <MetaProvider tags={tags}>
             <Router url={ctx.hydratedData.url}>
                 <Suspense>
                     <Routes>
@@ -37,6 +34,24 @@ function Entrypoint() {
                     </Routes>
                 </Suspense>
             </Router>
+        </MetaProvider>
+    )
+
+    return (
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <link rel="stylesheet" href="https://unpkg.com/98.css@0.1.18/dist/98.css"></link>
+            <link rel="stylesheet" href="/styles.css"></link>
+            <Assets>
+                {renderTags(tags)}
+            </Assets>
+            <HydrationScript/>
+        </head>
+        <body>
+        <div id="app">
+            {App}
         </div>
         </body>
         <NoHydration>
@@ -48,7 +63,7 @@ function Entrypoint() {
         </NoHydration>
         </html>
     );
-};
+}
 
 function EntrypointWrapper(p: IHydrationData) {
 
