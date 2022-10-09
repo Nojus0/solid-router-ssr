@@ -8,7 +8,7 @@ export default function HomeData(route: RouteDataFuncArgs) {
     const ctx = useHydration()
     const pathname = route.location.pathname
 
-    const [homePosts] = createResource(async (id) => {
+    const [homePosts] = createResource(async () => {
 
         if (isServer) {
             return ctx.hydratedData.props

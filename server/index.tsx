@@ -3,6 +3,7 @@ import express from "express";
 import path from "path"
 import {IFullPost} from "../app/src/Pages/Post";
 import Entrypoint from "../app/src/Document";
+import process from "process";
 
 const app = express();
 
@@ -94,6 +95,8 @@ app.use(["/:after", "/$"], async (req, res) => {
     res.status(200).send(html)
 });
 
-console.log(`Started on http://localhost`)
-app.listen(80)
+const PORT = process.env.PORT || 8080
+
+console.log(`Started on http://localhost:${PORT}`)
+app.listen(PORT)
 
