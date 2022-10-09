@@ -20,7 +20,7 @@ export default function HomeData(route: RouteDataFuncArgs) {
             return cached
         }
 
-        const NavigateResponse = await fetch(`/.props.json`)
+        const NavigateResponse = await fetch(`/index.props.json`)
         const NavigateProps = await NavigateResponse.json()
         const Props = NavigateProps.props
         ctx.routeCache.set(pathname, Props)

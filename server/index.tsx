@@ -1,4 +1,4 @@
-import {renderToString, renderToStringAsync} from "solid-js/web";
+import {renderToStringAsync} from "solid-js/web";
 import express from "express";
 import path from "path"
 import {IFullPost} from "../app/src/Pages/Post";
@@ -75,7 +75,7 @@ app.use("/post/:id", async (req, res) => {
 app.use(["/:after", "/$"], async (req, res) => {
 
     const isClientNavigate = req.params.after == ".props.json"
-
+    console.log(req.originalUrl)
     // If isn't props and is defined something else
     if (req.params.after != ".props.json" && req.params.after != undefined) {
         return res.status(404).send()
@@ -96,9 +96,12 @@ app.use(["/:after", "/$"], async (req, res) => {
     res.status(200).send(html)
 });
 
-function testStatic() {
-    const root = renderToString(() => (
-        <Entrypoint url="/" props={{props: testArticles}}/>
+async function testStatic() {
+    const props = {
+        props: testArticles
+    }
+    const root = await renderToStringAsync(() => (
+        <Entrypoint url="/" props={props}/>
     ))
 
 
@@ -106,10 +109,10 @@ function testStatic() {
     fs.mkdirSync("./static_test/post/")
 
     fs.writeFileSync("./static_test/index", root)
-    fs.writeFileSync("./static_test/.props.json", JSON.stringify({props: testArticles}))
+    fs.writeFileSync("./static_test/index.props.json", JSON.stringify({props: testArticles}))
 
     for (const article of testArticles) {
-        const Page = renderToString(() => (
+        const Page = await renderToStringAsync(() => (
             <Entrypoint url={`/post/${article.id}`} props={{props: article}}/>
         ))
 
@@ -118,8 +121,11 @@ function testStatic() {
     }
 
 }
+//
+// if (!fs.existsSync("./static_test")) {
+//     testStatic()
+// }
 
-testStatic()
 const PORT = process.env.PORT || 8080
 
 console.log(`Started on http://localhost:${PORT}`)
