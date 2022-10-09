@@ -1,9 +1,10 @@
-import {renderToStringAsync} from "solid-js/web";
+import {renderToString, renderToStringAsync} from "solid-js/web";
 import express from "express";
 import path from "path"
 import {IFullPost} from "../app/src/Pages/Post";
 import Entrypoint from "../app/src/Document";
 import process from "process";
+import fs from "fs"
 
 const app = express();
 
@@ -95,6 +96,30 @@ app.use(["/:after", "/$"], async (req, res) => {
     res.status(200).send(html)
 });
 
+function testStatic() {
+    const root = renderToString(() => (
+        <Entrypoint url="/" props={{props: testArticles}}/>
+    ))
+
+
+    fs.mkdirSync("./static_test")
+    fs.mkdirSync("./static_test/post/")
+
+    fs.writeFileSync("./static_test/index", root)
+    fs.writeFileSync("./static_test/.props.json", JSON.stringify({props: testArticles}))
+
+    for (const article of testArticles) {
+        const Page = renderToString(() => (
+            <Entrypoint url={`/post/${article.id}`} props={{props: article}}/>
+        ))
+
+        fs.writeFileSync(`./static_test/post/${article.id}`, Page)
+        fs.writeFileSync(`./static_test/post/${article.id}.props.json`, JSON.stringify({props: article}))
+    }
+
+}
+
+testStatic()
 const PORT = process.env.PORT || 8080
 
 console.log(`Started on http://localhost:${PORT}`)
