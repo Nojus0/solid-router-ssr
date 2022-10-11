@@ -2,3 +2,4 @@ node_modules
 build
 .output
 static_test
+wrangler.toml

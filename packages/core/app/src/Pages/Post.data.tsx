@@ -2,7 +2,6 @@ import {RouteDataFuncArgs} from "solid-app-router";
 import {isServer} from "solid-js/web";
 import {createResource} from "solid-js";
 import {useHydration} from "../HydrationContext";
-import * as path from "path";
 
 
 export default function PostData(route: RouteDataFuncArgs) {
@@ -23,13 +22,14 @@ export default function PostData(route: RouteDataFuncArgs) {
         }
 
         const NavigateResponse = await fetch(`/post/${id}.props.json`)
-        const NavigateProps = await NavigateResponse.json()
+        const NavigateProps = await NavigateResponse.json<any>()
         const Props = NavigateProps.props
 
         ctx.routeCache.set(pathname, Props)
         return Props
 
     })
+
 
     return post
 }

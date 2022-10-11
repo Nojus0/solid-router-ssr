@@ -57,7 +57,7 @@ export default [
                 dir: ".output/app/js",
                 format: "esm",
                 manualChunks(id) {
-                    if (id.includes('node_modules')) {
+                    if (id.includes('node_modules') || id === path.join(__dirname, "./app/src/RouteWrapper.tsx")) {
                         return 'vendor';
                     }
                 }
@@ -82,7 +82,7 @@ export default [
                 targets: [
                     {
                         src: ["app/public/*"],
-                        dest: ".output/app",
+                        dest: ".output/app/assets",
                     },
                 ],
             }),

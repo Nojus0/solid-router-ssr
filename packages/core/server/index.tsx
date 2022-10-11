@@ -71,15 +71,31 @@ app.use("/post/:id", async (req, res) => {
     res.status(200).send(html)
 })
 
+app.use("/add", async (req, res) => {
 
-app.use(["/:after", "/$"], async (req, res) => {
+    const html = await renderToStringAsync(() => (
+        <Entrypoint url={req.originalUrl} props={{}}/>
+    ))
+    res.status(200).send(html)
+})
 
-    const isClientNavigate = req.params.after == ".props.json"
-    console.log(req.originalUrl)
-    // If isn't props and is defined something else
-    if (req.params.after != ".props.json" && req.params.after != undefined) {
-        return res.status(404).send()
-    }
+app.use("/_add_new", express.json({type: "application/json"}), (req, res) => {
+    if (testArticles.find((i) => i.id == req.body.id)) return res.status(400).send()
+    testArticles.push({
+        html: req.body.html,
+        id: req.body.id,
+        description: req.body.description,
+        title: req.body.title,
+    })
+
+    res.status(200).send()
+})
+
+app.use(["/index.props.json", "/$"], async (req, res) => {
+
+    const url = new URL(req.originalUrl, `https://localhost:${PORT}`)
+
+    const isClientNavigate = url.pathname === "/index.props.json"
 
     const props = {
         props: testArticles
@@ -121,10 +137,11 @@ async function testStatic() {
     }
 
 }
-//
-// if (!fs.existsSync("./static_test")) {
-//     testStatic()
-// }
+
+
+if (!fs.existsSync("./static_test")) {
+    testStatic()
+}
 
 const PORT = process.env.PORT || 8080
 

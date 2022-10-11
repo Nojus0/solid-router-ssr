@@ -1,17 +1,16 @@
 import {IBasicPost} from "./Post";
-import {For, Resource} from "solid-js";
-import {Link, useRouteData} from "solid-app-router";
+import {For} from "solid-js";
+import {Link} from "solid-app-router";
 import {Title} from "@solidjs/meta";
+import RouteWrapper from "../RouteWrapper";
 
 
-function Home() {
-
-    const props = useRouteData() as unknown as Resource<IBasicPost[]>
+function Home(props: IBasicPost[]) {
 
     return (
         <>
-           <Title>Home Page</Title>
-            <For each={props()}>
+            <Title>Home Page</Title>
+            <For each={props}>
                 {
                     (item) => (
                         <div>
@@ -22,10 +21,16 @@ function Home() {
                     )
                 }
             </For>
+            <div style={{margin: "4rem 0"}}>
 
+                <Link href="/add">
+                    <button>Add New</button>
+                </Link>
+
+            </div>
         </>
     )
 }
 
 
-export default Home
+export default RouteWrapper(Home)

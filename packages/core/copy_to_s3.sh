@@ -10,7 +10,7 @@ aws s3 cp --content-type application/javascript --exclude "*" --include "*.js" -
 aws s3 cp --content-type text/css --exclude "*" --include "*.css" --recursive .output/app s3://"$BUCKET_NAME"/
 
 # Copy only html files
-aws s3 cp --content-type text/html --exclude "*.json" --recursive ./static_test s3://"$BUCKET_NAME"/
+#aws s3 cp --content-type text/html --exclude "*.json" --recursive ./static_test s3://"$BUCKET_NAME"/
 
 # Copy only *.props.json
-aws s3 cp --content-type application/json --exclude "*" --include "*.json" --recursive ./static_test s3://"$BUCKET_NAME"/
+#aws s3 cp --content-type application/json --exclude "*" --include "*.json" --recursive ./static_test s3://"$BUCKET_NAME"/

@@ -9,7 +9,6 @@ export const useHydration = () => useContext<HydrationContext>(HydrationContext)
 
 export function HydrationProvider(p: IHydrationData & { children: any }) {
 
-
     if (!isServer) {
         const Element = document.getElementById("SSR_DATA")
         if (Element == null || Element.textContent == null) throw new Error("Element or Element text null")
