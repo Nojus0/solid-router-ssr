@@ -10,7 +10,6 @@ router
     .get("/index.props.json", IndexPage)
 
 router.get("/post/:id", Post)
-
 router.get("/add", Add)
 
 

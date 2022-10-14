@@ -14,8 +14,8 @@ function Home(props: IBasicPost[]) {
                 {
                     (item) => (
                         <div>
-                            <h1>{item.title}</h1>
-                            <p>{item.description}</p>
+                            <h1 style={{"word-break": "break-all"}}>{item.title}</h1>
+                            <p style={{"word-break": "break-all"}}>{item.description}</p>
                             <Link href={`/post/${item.id}`}>Read</Link>
                         </div>
                     )

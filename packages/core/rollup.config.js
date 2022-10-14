@@ -18,10 +18,10 @@ try {
     // console.log(err)
 }
 
-export default [
+/** @type {import("rollup").RollupOptions[]}*/
+const Config = [
     {
         input: "server/index.tsx",
-
         output: [
             {
                 dir: ".output/server",
@@ -55,6 +55,7 @@ export default [
         output: [
             {
                 dir: ".output/app/js",
+                entryFileNames: "index-v1.js",
                 format: "esm",
                 manualChunks(id) {
                     if (id.includes('node_modules') || id === path.join(__dirname, "./app/src/RouteWrapper.tsx")) {
@@ -90,3 +91,5 @@ export default [
         ],
     },
 ];
+
+export default Config

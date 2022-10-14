@@ -4,7 +4,7 @@ import HomeData from "./Pages/Home.data";
 import PostData from "./Pages/Post.data";
 import {HydrationProvider, useHydration} from "./HydrationContext";
 import {MetaProvider, renderTags} from "@solidjs/meta"
-import {Assets, Dynamic, HydrationScript, isServer, NoHydration} from "solid-js/web";
+import {Assets, HydrationScript, isServer, NoHydration} from "solid-js/web";
 import Home from "./Pages/Home";
 import Post from "./Pages/Post";
 import Add from "./Pages/Add";
@@ -63,7 +63,7 @@ function Entrypoint() {
                     {JSON.stringify(ctx.hydratedData)}
                 </script>
 
-                <script type="module" src="/js/index.js" async></script>
+                <script type="module" src="/js/index-v1.js" async></script>
             </NoHydration>
             </html>
         </>

@@ -4,7 +4,6 @@ import path from "path"
 import {IFullPost} from "../app/src/Pages/Post";
 import Entrypoint from "../app/src/Document";
 import process from "process";
-import fs from "fs"
 
 const app = express();
 
@@ -79,7 +78,7 @@ app.use("/add", async (req, res) => {
     res.status(200).send(html)
 })
 
-app.use("/_add_new", express.json({type: "application/json"}), (req, res) => {
+app.use("/api/_add_new", express.json({type: "application/json"}), (req, res) => {
     if (testArticles.find((i) => i.id == req.body.id)) return res.status(400).send()
     testArticles.push({
         html: req.body.html,
@@ -111,37 +110,6 @@ app.use(["/index.props.json", "/$"], async (req, res) => {
 
     res.status(200).send(html)
 });
-
-async function testStatic() {
-    const props = {
-        props: testArticles
-    }
-    const root = await renderToStringAsync(() => (
-        <Entrypoint url="/" props={props}/>
-    ))
-
-
-    fs.mkdirSync("./static_test")
-    fs.mkdirSync("./static_test/post/")
-
-    fs.writeFileSync("./static_test/index", root)
-    fs.writeFileSync("./static_test/index.props.json", JSON.stringify({props: testArticles}))
-
-    for (const article of testArticles) {
-        const Page = await renderToStringAsync(() => (
-            <Entrypoint url={`/post/${article.id}`} props={{props: article}}/>
-        ))
-
-        fs.writeFileSync(`./static_test/post/${article.id}`, Page)
-        fs.writeFileSync(`./static_test/post/${article.id}.props.json`, JSON.stringify({props: article}))
-    }
-
-}
-
-
-if (!fs.existsSync("./static_test")) {
-    testStatic()
-}
 
 const PORT = process.env.PORT || 8080
 

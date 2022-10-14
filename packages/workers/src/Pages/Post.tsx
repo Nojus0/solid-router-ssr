@@ -2,6 +2,7 @@ import {Request} from "itty-router";
 import {renderToStringAsync} from "solid-js/web";
 import Entrypoint from "../../../core/app/src/Document"
 import fetchPostById from "../GraphCMS/fetchPostById";
+import {BROWSER_CACHE_TTL, EDGE_CACHE_TTL} from "../GraphCMS/Constants";
 
 export async function Post(request: Request & globalThis.Request) {
 
@@ -25,23 +26,25 @@ export async function Post(request: Request & globalThis.Request) {
     }
 
     if (IsPropsNavigate) {
+        console.log(`Responded to ${ID} post props`)
         return new Response(JSON.stringify(Props), {
             status: 200,
             headers: {
                 "Content-Type": "application/json",
-                "Cache-Control": "max-age=5"
+                "Cache-Control": `max-age=${BROWSER_CACHE_TTL}, must-revalidate`
             }
         })
     }
 
 
     const html = await renderToStringAsync(() =>
-        <Entrypoint props={Props} url={request.url}/>
+        <Entrypoint props={Props} url={`/post/${ID}`}/>
     )
+    console.log(`Responded to ${ID} html page`)
     return new Response(`<!DOCTYPE html>` + html, {
         status: 200, headers: {
             "Content-Type": "text/html",
-            "Cache-Control": "max-age=5"
+            "Cache-Control": `max-age=${BROWSER_CACHE_TTL}, must-revalidate`
         }
     })
 }

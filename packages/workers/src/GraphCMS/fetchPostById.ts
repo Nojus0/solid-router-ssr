@@ -1,4 +1,5 @@
 import {IGraphCMSPost} from "./fetchPosts";
+import {EDGE_CACHE_TTL} from "./Constants";
 
 export default async function fetchPostById(id: string) {
 
@@ -27,7 +28,7 @@ query QueryPosts($id: String) {
         redirect: 'follow',
         cf: {
             cacheEverything: true,
-            cacheTtl: 5,
+            cacheTtl: EDGE_CACHE_TTL,
         },
     };
 

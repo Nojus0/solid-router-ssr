@@ -12,7 +12,7 @@ function Add() {
     const ctx = useHydration()
 
     async function submit() {
-        const Response = await fetch("/_add_new", {
+        const Response = await fetch("/api/_add_new", {
             method: "POST",
             body: JSON.stringify({
                 id: id(),

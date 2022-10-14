@@ -1,3 +1,5 @@
+import {EDGE_CACHE_TTL} from "./Constants";
+
 declare global {
     const GRAPHCMS_API_KEY: string
     const GRAPHCMS_CONTENT_ENDPOINT: string
@@ -9,6 +11,7 @@ export interface IGraphCMSPost {
     description: string
     html: string
 }
+
 
 export default async function fetchPosts() {
 
@@ -36,7 +39,7 @@ query QueryPosts {
         redirect: 'follow',
         cf: {
             cacheEverything: true,
-            cacheTtl: 5,
+            cacheTtl: EDGE_CACHE_TTL,
         },
     };
 

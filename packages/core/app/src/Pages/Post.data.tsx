@@ -22,10 +22,11 @@ export default function PostData(route: RouteDataFuncArgs) {
         }
 
         const NavigateResponse = await fetch(`/post/${id}.props.json`)
-        const NavigateProps = await NavigateResponse.json<any>()
+        const NavigateProps = await NavigateResponse.json()
         const Props = NavigateProps.props
 
         ctx.routeCache.set(pathname, Props)
+        console.log(ctx.routeCache)
         return Props
 
     })
