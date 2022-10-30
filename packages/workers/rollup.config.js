@@ -3,6 +3,7 @@ import common from "@rollup/plugin-commonjs";
 import babel from "@rollup/plugin-babel";
 import terser from "rollup-plugin-terser";
 import jsonPlugin from "@rollup/plugin-json"
+import postcss from "rollup-plugin-postcss"
 import path from "path";
 
 const extensions = [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"];
@@ -24,6 +25,12 @@ const Config = {
     preserveEntrySignatures: false,
     external: IsProd ? [] : ["solid-js", "solid-js/web", "path", "express"],
     plugins: [
+        postcss({
+            extract: false,
+            modules: true,
+            minimize: false,
+            inject: false
+        }),
         jsonPlugin(),
         nodeResolve({
             preferBuiltins: true,

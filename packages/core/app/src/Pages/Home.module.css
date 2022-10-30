@@ -1,0 +1,42 @@
+
+.title {
+    color: red;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container_inner {
+    width: clamp(5rem, 100%, 50rem);
+}
+
+.post {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 0 4rem 0;
+    border-radius: .5rem;
+}
+
+.post_title {
+    font-family: Georgia;
+}
+
+.post_description {
+    font-family: Georgia;
+}
+.post_img {
+    height: 20rem;
+    object-fit: cover;
+}
+.post_bottom {
+    display: flex;
+    flex-direction: column;
+    background: #F8F8F8;
+    padding: 2rem;
+}

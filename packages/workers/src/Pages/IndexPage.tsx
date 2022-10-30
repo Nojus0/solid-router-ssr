@@ -1,12 +1,21 @@
 import {renderToStringAsync} from "solid-js/web"
 import {IFullPost} from "../../../core/app/src/Pages/Post"
 import Entrypoint from "../../../core/app/src/Document"
-import fetchPosts from "../GraphCMS/fetchPosts";
-import {BROWSER_CACHE_TTL, EDGE_CACHE_TTL} from "../GraphCMS/Constants";
+import fetchPosts, {IGraphCMSPost} from "../GraphCMS/fetchPosts";
+import {BROWSER_CACHE_TTL} from "../GraphCMS/Constants";
 
-export async function IndexPage(request: Request & globalThis.Request) {
+export const INDEX_API_RESPONSE_CACHE_KEY = "/?api_response"
+
+export async function IndexPage(request: Request & globalThis.Request, event: FetchEvent) {
+
+    const CachedResult = await CACHE_KV.get(INDEX_API_RESPONSE_CACHE_KEY)
     const URI = new URL(request.url)
-    const API_RESPONSE = await fetchPosts()
+
+    const API_RESPONSE: IGraphCMSPost[] = (CachedResult && JSON.parse(CachedResult)) || await fetchPosts()
+    if (!CachedResult) {
+        event.waitUntil(CACHE_KV.put(INDEX_API_RESPONSE_CACHE_KEY, JSON.stringify(API_RESPONSE)))
+    }
+
     const Props = {
         props: API_RESPONSE.map((i) => ({
             id: i.postId,
@@ -23,7 +32,8 @@ export async function IndexPage(request: Request & globalThis.Request) {
             {
                 headers: {
                     "Content-Type": "application/json",
-                    "Cache-Control": `max-age=${BROWSER_CACHE_TTL}, must-revalidate`
+                    "Cache-Control": `no-cache, no-store, max-age=${BROWSER_CACHE_TTL}, must-revalidate`,
+                    "X-Cf-Kv-Cache-Status": CachedResult ? "HIT" : "MISS"
                 },
                 status: 200
             })
@@ -37,7 +47,8 @@ export async function IndexPage(request: Request & globalThis.Request) {
     return new Response(`<!DOCTYPE html>` + html, {
         headers: {
             "Content-Type": "text/html",
-            "Cache-Control": `max-age=${BROWSER_CACHE_TTL}, must-revalidate`
+            "Cache-Control": `no-cache, no-store, max-age=${BROWSER_CACHE_TTL}, must-revalidate`,
+            "X-Cf-Kv-Cache-Status": CachedResult ? "HIT" : "MISS"
         },
         status: 200,
     })

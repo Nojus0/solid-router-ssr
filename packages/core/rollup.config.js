@@ -6,6 +6,7 @@ import copy from "rollup-plugin-copy";
 import jsonPlugin from "@rollup/plugin-json"
 import fs from "fs"
 import path from "path";
+import postcss from "rollup-plugin-postcss"
 
 const extensions = [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"];
 
@@ -32,6 +33,12 @@ const Config = [
         preserveEntrySignatures: false,
         external: IsProd ? [] : ["solid-js", "solid-js/web", "path", "express"],
         plugins: [
+            postcss({
+                extract: false,
+                modules: true,
+                minimize: false,
+                inject: false
+            }),
             jsonPlugin(),
             nodeResolve({
                 preferBuiltins: true,
@@ -54,7 +61,7 @@ const Config = [
         input: "app/index.tsx",
         output: [
             {
-                dir: ".output/app/js",
+                dir: ".output/app",
                 entryFileNames: "index-v1.js",
                 format: "esm",
                 manualChunks(id) {
@@ -66,6 +73,11 @@ const Config = [
         ],
         preserveEntrySignatures: false,
         plugins: [
+            postcss({
+                extract: "styles-v1.css",
+                modules: true,
+                minimize: IsProd,
+            }),
             nodeResolve({
                 exportConditions: ["solid"],
                 extensions,
@@ -79,15 +91,16 @@ const Config = [
                 ],
             }),
             common({extensions}),
-            copy({
-                targets: [
-                    {
-                        src: ["app/public/*"],
-                        dest: ".output/app/assets",
-                    },
-                ],
-            }),
+            // copy({
+            //     targets: [
+            //         {
+            //             src: [".output/app/js/css"],
+            //             dest: ".output/app/css",
+            //         },
+            //     ],
+            // }),
             IsProd && terser.terser(),
+
         ],
     },
 ];

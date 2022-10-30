@@ -26,7 +26,7 @@ export default function PostData(route: RouteDataFuncArgs) {
         const Props = NavigateProps.props
 
         ctx.routeCache.set(pathname, Props)
-        console.log(ctx.routeCache)
+        !isServer && console.log(ctx.routeCache)
         return Props
 
     })

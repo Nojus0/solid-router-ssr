@@ -1,8 +1,7 @@
 import {IGraphCMSPost} from "./fetchPosts";
-import {EDGE_CACHE_TTL} from "./Constants";
 
 export default async function fetchPostById(id: string) {
-
+    console.log("!!! FETCHING POST BY ID !!!")
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${GRAPHCMS_API_KEY}`);
     myHeaders.append("Content-Type", "application/json");
@@ -27,8 +26,8 @@ query QueryPosts($id: String) {
         body: graphql,
         redirect: 'follow',
         cf: {
-            cacheEverything: true,
-            cacheTtl: EDGE_CACHE_TTL,
+            cacheEverything: false,
+            cacheTtl: 0
         },
     };
 

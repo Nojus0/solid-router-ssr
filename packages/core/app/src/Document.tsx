@@ -8,6 +8,7 @@ import {Assets, HydrationScript, isServer, NoHydration} from "solid-js/web";
 import Home from "./Pages/Home";
 import Post from "./Pages/Post";
 import Add from "./Pages/Add";
+import "../styles/styles-v1.css"
 
 export interface IHydrationData {
     url: string
@@ -46,8 +47,8 @@ function Entrypoint() {
             <head>
                 <meta charset="UTF-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-                <link rel="stylesheet" href="https://unpkg.com/98.css@0.1.18/dist/98.css"></link>
-                <link rel="stylesheet" href="/assets/styles.css"></link>
+                {/*<link rel="stylesheet" href="https://unpkg.com/98.css@0.1.18/dist/98.css"></link>*/}
+                <link rel="stylesheet" href="/js/css/styles-v1.css"></link>
                 <Assets>
                     {renderTags(tags)}
                 </Assets>

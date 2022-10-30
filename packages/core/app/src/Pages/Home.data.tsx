@@ -8,7 +8,6 @@ export default function HomeData(route: RouteDataFuncArgs) {
     const ctx = useHydration()
 
     const pathname = route.location.pathname
-    console.log(route.location)
 
     const [homePosts] = createResource(async () => {
 
@@ -26,7 +25,7 @@ export default function HomeData(route: RouteDataFuncArgs) {
         const NavigateProps = await NavigateResponse.json()
         const Props = NavigateProps.props
         ctx.routeCache.set(pathname, Props)
-        console.log(ctx.routeCache)
+        !isServer && console.log(ctx.routeCache)
         return Props
     });
 

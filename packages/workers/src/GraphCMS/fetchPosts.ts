@@ -1,5 +1,3 @@
-import {EDGE_CACHE_TTL} from "./Constants";
-
 declare global {
     const GRAPHCMS_API_KEY: string
     const GRAPHCMS_CONTENT_ENDPOINT: string
@@ -14,7 +12,7 @@ export interface IGraphCMSPost {
 
 
 export default async function fetchPosts() {
-
+    console.log("!!! FETCHING POSTS !!!")
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${GRAPHCMS_API_KEY}`);
     myHeaders.append("Content-Type", "application/json");
@@ -38,8 +36,8 @@ query QueryPosts {
         body: graphql,
         redirect: 'follow',
         cf: {
-            cacheEverything: true,
-            cacheTtl: EDGE_CACHE_TTL,
+            cacheEverything: false,
+            cacheTtl: 0
         },
     };
 
