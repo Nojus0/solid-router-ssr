@@ -5,8 +5,8 @@
   "main": ".worker/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cross-env NODE_ENV=PROD rollup -c rollup.config.js",
-    "build:dev": "cross-env NODE_ENV=DEV rollup -c rollup.config.js",
+    "build": "cross-env NODE_ENV=PROD rollup -c rollup.config.mjs --bundleConfigAsCjs",
+    "build:dev": "cross-env NODE_ENV=DEV rollup -c rollup.config.mjs --bundleConfigAsCjs",
     "deploy": "npm run build && wrangler publish"
   },
   "keywords": [],
@@ -22,7 +22,8 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "babel-preset-solid": "^1.5.7",
     "cross-env": "^7.0.3",
-    "rollup": "^2.74.1",
+    "postcss": "^8.4.18",
+    "rollup": "^3.7.4",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-terser": "^7.0.2",

@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "rollup": "rollup -c rollup.config.js",
     "dev": "node server",
-    "build": "cross-env NODE_ENV=PROD rollup -c rollup.config.js",
+    "build": "cross-env NODE_ENV=PROD rollup -c rollup.config.js --bundleConfigAsCjs",
     "build:dev": "rollup -c rollup.config.js",
-    "start": "npm run build:dev && node .output/server/index.js"
+    "start": "npm run build:dev && node .output/server/index.js --bundleConfigAsCjs"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +27,7 @@
     "cross-env": "^7.0.3",
     "express": "^4.18.1",
     "postcss": "^8.4.18",
-    "rollup": "^2.74.1",
+    "rollup": "^3.7.4",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-terser": "^7.0.2"
