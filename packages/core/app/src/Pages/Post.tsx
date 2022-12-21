@@ -1,7 +1,5 @@
 import {Link, useParams, useRouteData} from "solid-app-router";
-import {Accessor, Component, createEffect, createMemo, Resource, Show} from "solid-js";
 import {Title} from "@solidjs/meta";
-import {isServer} from "solid-js/web";
 import RouteWrapper from "../RouteWrapper";
 
 export interface IBasicPost {

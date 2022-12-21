@@ -1,14 +1,13 @@
 import {lazy, Suspense,} from "solid-js";
 import {Route, Router, Routes} from "solid-app-router"
-import HomeData from "./Pages/Home.data";
-import PostData from "./Pages/Post.data";
 import {HydrationProvider, useHydration} from "./HydrationContext";
 import {MetaProvider, renderTags} from "@solidjs/meta"
 import {Assets, HydrationScript, isServer, NoHydration} from "solid-js/web";
 import Home from "./Pages/Home";
 import Post from "./Pages/Post";
 import Add from "./Pages/Add";
-import "../styles/styles-v1.css"
+import HomeData from "./Pages/Home.data";
+import PostData from "./Pages/Post.data";
 
 export interface IHydrationData {
     url: string
@@ -47,8 +46,7 @@ function Entrypoint() {
             <head>
                 <meta charset="UTF-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-                {/*<link rel="stylesheet" href="https://unpkg.com/98.css@0.1.18/dist/98.css"></link>*/}
-                <link rel="stylesheet" href="/js/css/styles-v1.css"></link>
+                <link rel="stylesheet" href="https://unpkg.com/98.css@0.1.18/dist/98.css"></link>
                 <Assets>
                     {renderTags(tags)}
                 </Assets>
@@ -64,7 +62,7 @@ function Entrypoint() {
                     {JSON.stringify(ctx.hydratedData)}
                 </script>
 
-                <script type="module" src="/js/index-v1.js" async></script>
+                <script type="module" src="/index.tsx" async></script>
             </NoHydration>
             </html>
         </>
@@ -72,7 +70,6 @@ function Entrypoint() {
 }
 
 function EntrypointWrapper(p: IHydrationData) {
-
     return <HydrationProvider props={p.props} url={p.url}>
         <Entrypoint/>
     </HydrationProvider>

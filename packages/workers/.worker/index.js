@@ -1,1 +1,1341 @@
-const e=Symbol("error"),t=Symbol("branch");function n(e){return e instanceof Error||"string"==typeof e?e:new Error("Unknown error")}function r(t){t=n(t);const r=y(s,e);if(!r)throw t;for(const e of r)e(t)}const o={context:null,owner:null};let s=null;function a(e,t){t&&(s=t);const n=s,a=0===e.length?o:{context:null,owner:n};let i;s=a;try{i=e((()=>{}))}catch(e){r(e)}finally{s=n}return i}function i(e,t){return[()=>e,t=>e="function"==typeof t?t(e):t]}const c=function(e,t){s={owner:s,context:null};try{e(t)}catch(e){r(e)}finally{s=s.owner}};function l(e,t){let n;s={owner:s,context:null};try{n=e(t)}catch(e){r(e)}finally{s=s.owner}return()=>n}const u=function(e){return e()};function d(e,t,n={}){const r=Array.isArray(e),o=n.defer;return()=>{if(o)return;let n;if(r){n=[];for(let t=0;t<e.length;t++)n.push(e[t]())}else n=e();return t(n)}}function p(e){const t=Symbol("context");return{id:t,Provider:v(t),defaultValue:e}}function f(e){let t;return void 0!==(t=y(s,e.id))?t:e.defaultValue}function h(e){const t=l((()=>m(e())));return t.toArray=()=>{const e=t();return Array.isArray(e)?e:null!=e?[e]:[]},t}function g(e,t){const n=s;s=e;try{return t()}catch(e){r(e)}finally{s=n}}function y(e,t){return e?e.context&&void 0!==e.context[t]?e.context[t]:y(e.owner,t):void 0}function m(e){if("function"==typeof e&&!e.length)return m(e());if(Array.isArray(e)){const t=[];for(let n=0;n<e.length;n++){const r=m(e[n]);Array.isArray(r)?t.push.apply(t,r):t.push(r)}return t}return e}function v(e){return function(t){return l((()=>(s.context={[e]:t.value},h((()=>t.children)))))}}function w(e){const t=typeof e;if("string"===t)return e;if(null==e||"boolean"===t)return"";if(Array.isArray(e)){let t="";for(let n=0,r=e.length;n<r;n++)t+=w(e[n]);return t}return"object"===t?e.t:"function"===t?w(e()):String(e)}const x={};function b(e){x.context=e}function $(e,t){if(x.context&&!x.context.noHydrate){const n=x.context;b(x.context?{...x.context,id:`${x.context.id}${x.context.count++}-`,count:0}:void 0);const r=e(t||{});return b(n),r}return e(t||{})}function P(...e){const t={};for(let n=0;n<e.length;n++){let r=e[n];"function"==typeof r&&(r=r()),r&&Object.defineProperties(t,Object.getOwnPropertyDescriptors(r))}return t}function k(e){return function(e,t){const n=e.each||[],r=n.length,o=e.children;if(r){let e=Array(r);for(let s=0;s<r;s++)e[s]=t(o,n[s],s);return e}return e.fallback}(e,((e,t,n)=>e(t,(()=>n))))}function O(e){let t;return e.when?"function"==typeof(t=e.children)?t(e.when):t:e.fallback||""}const j=p();let A=null;function C(e,t,r={}){2===arguments.length?"object"==typeof t&&(r=t,t=e,e=!0):1===arguments.length&&(t=e,e=!0);const o=new Set,s=x.context.id+x.context.count++;let a,i,c={},l=r.storage?r.storage(r.initialValue)[0]():r.initialValue;if(x.context.async&&"initial"!==r.ssrLoadFrom&&(c=x.context.resources[s]||(x.context.resources[s]={}),c.ref))return c.data||c.ref[0].loading||c.ref[0].error||c.ref[1].refetch(),c.ref;const u=()=>{if(i)throw i;A&&a&&A.push(a);const e="initial"!==r.ssrLoadFrom&&x.context.async&&"data"in x.context.resources[s];if(!e&&u.loading){const e=f(j);e&&(e.resources.set(s,u),o.add(e))}return e?x.context.resources[s].data:l};function d(){const c=x.context;if(!c.async)return u.loading=!!("function"==typeof e?e():e);if(c.resources&&s in c.resources&&"data"in c.resources[s])return void(l=c.resources[s].data);A=[];const d="function"==typeof e?e():e;if(A.length&&(a=Promise.all(A).then((()=>t(e(),{value:l})))),A=null,!a){if(null==d||!1===d)return;a=t(d,{value:l})}return null!=a&&"object"==typeof a&&"then"in a?(u.loading=!0,u.state="pending",c.writeResource&&c.writeResource(s,a,void 0,r.deferStream),a.then((e=>(u.loading=!1,u.state="resolved",c.resources[s].data=e,a=null,R(o),e))).catch((e=>{u.loading=!1,u.state="errored",u.error=i=n(e),a=null,R(o)}))):(c.resources[s].data=a,c.writeResource&&c.writeResource(s,a),a=null,c.resources[s].data)}return u.loading=!1,u.error=void 0,u.state="initialValue"in r?"resolved":"unresolved",Object.defineProperty(u,"latest",{get:()=>u()}),"initial"!==r.ssrLoadFrom&&d(),c.ref=[u,{refetch:d,mutate:e=>l=e}]}function T(e){for(const t of e.resources.values())if(t.loading)return!1;return!0}function R(e){for(const t of e)T(t)&&t.completed();e.clear()}function S(n){let r,o;const a=x.context,i=a.id+a.count,c=s;c&&(c.context?c.context[t]=o={}:c.context={[t]:o={}});const l=a.suspense[i]||(a.suspense[i]={resources:new Map,completed:()=>{const e=u();T(l)&&r(w(e))}});function u(){return b({...a,count:0}),g(c,(()=>$(j.Provider,{value:l,get children(){return o&&function(e){if(e.cleanups){for(let t=0;t<e.cleanups.length;t++)e.cleanups[t]();e.cleanups=void 0}}(o),n.children}})))}const d=u();if(T(l))return d;var p;if(p=e=>{if(!r||!r(void 0,e)){if(!c)throw e;g(c.owner,(()=>{throw e}))}},s&&(null===s.context?s.context={[e]:[p]}:s.context[e]?s.context[e].push(p):s.context[e]=[p]),r=a.async?a.registerFragment(i):void 0,a.async){b({...a,count:0,id:a.id+"0.f",noHydrate:!0});const e={t:`<span id="pl-${i}">${w(n.fallback)}</span>`};return b(a),e}return b({...a,count:0,id:a.id+"0.f"}),a.writeResource(i,"$$f"),n.fallback}const E=["allowfullscreen","async","autofocus","autoplay","checked","controls","default","disabled","formnovalidate","hidden","indeterminate","ismap","loop","multiple","muted","nomodule","novalidate","open","playsinline","readonly","required","reversed","seamless","selected"],N=new Set(E),H=new Set(["innerHTML","textContent","innerText","children"]),_={className:"class",htmlFor:"for"},{hasOwnProperty:M}=Object.prototype,I="hjkmoquxzABCDEFGHIJKLNPQRTUVWXYZ$_",L=I.length,D="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$_",Y=D.length,W=[],q=[""];let F=new Map,z=new WeakMap,B=0;function U(e){if(J(e,"")){let t=q[0];for(let e=1,n=q.length;e<n;e++)t+=q[e];if(B){if(F.size){let n=z.get(e);"number"==typeof n&&(n=X(B++),t=n+"="+t);for(const[e,n]of F)t+=";"+n+e;t+=";return "+n,F=new Map}else t="return "+t;t="(function("+function(){let e=I[0];for(let t=1;t<B;t++)e+=","+X(t);return B=0,e}()+"){"+t+"}())"}else e&&e.constructor===Object&&(t="("+t+")");return q.length=0,z=new WeakMap,t}return"void 0"}function J(e,t){switch(typeof e){case"string":q.push(Q(e,0));break;case"number":q.push(e+"");break;case"boolean":q.push(e?"!0":"!1");break;case"object":if(null===e)q.push("null");else{const n=function(e,t){let n=z.get(e);if(void 0===n)return z.set(e,q.length),!1;"number"==typeof n&&(n=Z(e,n));if(W.includes(e)){const e=W[W.length-1];let r=z.get(e);return"number"==typeof r&&(r=Z(e,r)),F.set(n,(F.get(n)||"")+function(e,t){return e+("number"==typeof t||'"'===t[0]?"["+t+"]":"."+t)}(r,t)+"="),!0}return n}(e,t);switch(n){case!0:return!1;case!1:switch(e.constructor){case Object:V(e);break;case Array:G(e);break;case Date:q.push('new Date("'+e.toISOString()+'")');break;case RegExp:q.push(e+"");break;case Map:q.push("new Map("),G(Array.from(e)),q.push(")");break;case Set:q.push("new Set("),G(Array.from(e)),q.push(")");break;case void 0:q.push("Object.assign(Object.create(null),"),V(e),q.push("))");break;default:return!1}break;default:q.push(n)}}break;default:return!1}return!0}function V(e){let t="{";W.push(e);for(const n in e)if(M.call(e,n)){const r=e[n],o=K(n);q.push(t+o+":"),J(r,o)?t=",":q.pop()}"{"===t?q.push("{}"):q.push("}"),W.pop()}function G(e){q.push("["),W.push(e),J(e[0],0);for(let t=1,n=e.length;t<n;t++)q.push(","),J(e[t],t);W.pop(),q.push("]")}function K(e){const t=function(e){let t=e[0];if(!(t>="a"&&t<="z"||t>="A"&&t<="Z"||"$"===t||"_"===t))return 0;for(let n=1,r=e.length;n<r;n++)if(t=e[n],!(t>="a"&&t<="z"||t>="A"&&t<="Z"||t>="0"&&t<="9"||"$"===t||"_"===t))return n;return-1}(e);return-1===t?e:Q(e,t)}function Q(e,t){let n="",r=0;for(let o=t,s=e.length;o<s;o++){let t;switch(e[o]){case'"':t='\\"';break;case"\\":t="\\\\";break;case"<":t="\\x3C";break;case"\n":t="\\n";break;case"\r":t="\\r";break;case"\u2028":t="\\u2028";break;case"\u2029":t="\\u2029";break;default:continue}n+=e.slice(r,o)+t,r=o+1}return r===t?n=e:n+=e.slice(r),'"'+n+'"'}function Z(e,t){const n=X(B++);return z.set(e,n),t?q[t-1]+=n+"=":q[t]=n+"="+q[t],n}function X(e){let t=e%L,n=I[t];for(e=(e-t)/L;e>0;)t=e%Y,n+=D[t],e=(e-t)/Y;return n}q.pop();function ee(e,t={}){const{timeoutMs:n=3e4}=t;let r;const o=new Promise(((e,t)=>{r=setTimeout((()=>t("renderToString timed out")),n)}));return Promise.race([te(e,t),o]).then((e=>(clearTimeout(r),e)))}function te(e,t={}){let{nonce:n,onCompleteShell:r,onCompleteAll:o,renderId:s}=t;const a=[],i=new Map,c=new WeakMap,l=()=>{i.size||m||(d(),o&&o({write(e){!m&&b.write(e)}}),f&&f.end(),m=!0)},u=e=>{g+=e+";",!w&&y&&(Promise.resolve().then(d),w=!0)},d=()=>{g.length&&!m&&y&&(b.write(`<script${n?` nonce="${n}"`:""}>${g}<\/script>`),g=""),w=!1};let p,f,h="",g="",y=!1,m=!1,v=!1,w=!0,b={write(e){h+=e}};x.context=p={id:s||"",count:0,async:!0,resources:{},suspense:{},assets:[],nonce:n,block(e){y||a.push(e)},replace(e,t){if(y)return;const n=`<!${e}>`,r=$.indexOf(n);if(-1===r)return;const o=$.indexOf(`<!/${e}>`,r+n.length);$=$.replace($.slice(r,o+n.length+1),de(t()))},writeResource:(e,t,n,r)=>n?u(fe(c,e,t,pe)):t&&"object"==typeof t&&"then"in t?(y?u(`_$HY.init("${e}")`):r&&a.push(t),void t.then((t=>{!m&&u(fe(c,e,t))})).catch((()=>{!m&&u(`_$HY.set("${e}", {})`)}))):u(fe(c,e,t)),registerFragment:e=>(i.has(e)||(i.set(e,[]),y&&u(`_$HY.init("${e}")`)),(t,n)=>{if(i.has(e)){const r=i.get(e);if(i.delete(e),function(e,t){for(const n of[...e.keys()].reverse())if(t.startsWith(n))return e.get(n).push(t),!0;return!1}(i,e))return;void 0===t&&!n||m||(y?(b.write(`<div hidden id="${e}">${void 0!==t?t:" "}</div>`),u(`${r.length?r.map((e=>`_$HY.unset("${e}")`)).join(";")+";":""}$df("${e}"${n?","+pe(n):""})${v?"":';function $df(e,t,d,l){d=document.getElementById(e),(l=document.getElementById("pl-"+e))&&l.replaceWith(...d.childNodes),d.remove(),_$HY.set(e,t)}'}`),v=!0):(Promise.resolve().then((()=>$=function(e,t,n){const r=/(<[/]?span[^>]*>)/g,o=`<span id="pl-${t}">`,s=e.indexOf(o);if(-1===s)return e;let a;r.lastIndex=s+o.length;let i=0,c=0;for(;a=r.exec(e);)if("/"===a[0][1]){if(c++,c>i)break}else i++;return e.slice(0,s)+n+e.slice(r.lastIndex)}($,e,void 0!==t?t:""))),n&&u(fe(c,e,n,pe))))}return i.size||Promise.resolve().then(l),y})};let $=de(ue(e()));function P(){x.context=p,p.noHydrate=!0,$=function(e,t){if(!e||!e.length)return t;let n="";for(let t=0,r=e.length;t<r;t++)n+=e[t]();return t.replace("</head>",n+"</head>")}(p.assets,$);for(const e in p.resources)"data"in p.resources[e]||p.resources[e].ref[0].error||u(`_$HY.init("${e}")`);for(const e of i.keys())u(`_$HY.init("${e}")`);g.length&&($=function(e,t,n){const r=`<script${n?` nonce="${n}"`:""}>${t}<\/script>`,o=e.indexOf("\x3c!--xs--\x3e");if(o>-1)return e.slice(0,o)+r+e.slice(o);return e+r}($,g,n)),b.write($),g="",w=!1,r&&r({write(e){!m&&b.write(e)}})}return{then(e){function t(){P(),e(h)}o?(ogComplete=o,o=e=>{ogComplete(e),t()}):o=t,i.size||Promise.resolve().then(l)},pipe(e){Promise.allSettled(a).then((()=>{P(),b=f=e,b.write(h),y=!0,m?f.end():setTimeout(l)}))},pipeTo(e){Promise.allSettled(a).then((()=>{P();const t=new TextEncoder,n=e.getWriter();f={end(){n.releaseLock(),e.close()}},b={write(e){n.write(t.encode(e))}},b.write(h),y=!0,m?f.end():setTimeout(l)}))}}}function ne(e){var t;t=()=>e.children,x.context.assets.push((()=>de(t())))}function re(e){const{nonce:t}=x.context;return se(function({eventNames:e=["click","input"],nonce:t}={}){return`<script${t?` nonce="${t}"`:""}>var e,t;e=window._$HY||(_$HY={events:[],completed:new WeakSet,r:{}}),t=e=>e&&e.hasAttribute&&(e.hasAttribute("data-hk")?e:t(e.host&&e.host instanceof Node?e.host:e.parentNode)),["${e.join('","')}"].forEach((o=>document.addEventListener(o,(o=>{let s=o.composedPath&&o.composedPath()[0]||o.target,a=t(s);a&&!e.completed.has(a)&&e.events.push([a,o])})))),e.init=(t,o)=>{e.r[t]=[new Promise(((e,t)=>o=e)),o]},e.set=(t,o,s)=>{(s=e.r[t])&&s[1](o),e.r[t]=[o]},e.unset=t=>{delete e.r[t]},e.load=t=>e.r[t];<\/script>\x3c!--xs--\x3e`}({nonce:t,...e}))}function oe(e){const t=x.context;t.noHydrate=!0;const n=e.children;return t.noHydrate=!1,n}function se(e,...t){if(t.length){let n="";for(let r=0;r<t.length;r++){n+=e[r];const o=t[r];void 0!==o&&(n+=de(o))}e=n+e[t.length]}return{t:e}}function ae(e){if(!e)return"";let t=Object.keys(e),n="";for(let r=0,o=t.length;r<o;r++){const o=t[r],s=!!e[o];o&&s&&(r&&(n+=" "),n+=o)}return n}function ie(e){if(!e)return"";if("string"==typeof e)return e;let t="";const n=Object.keys(e);for(let r=0;r<n.length;r++){const o=n[r];r&&(t+=";"),t+=`${o}:${ue(e[o],!0)}`}return t}function ce(e,t,n){return n?t?" "+e:"":null!=t?` ${e}="${t}"`:""}function le(){const e=function(){const e=x.context;return e&&!e.noHydrate&&`${e.id}${e.count++}`}();return e?` data-hk="${e}"`:""}function ue(e,t){const n=typeof e;if("string"!==n){if(!t&&"function"===n)return ue(e(),t);if(!t&&Array.isArray(e)){let n="";for(let r=0;r<e.length;r++)n+=de(ue(e[r],t));return{t:n}}return t&&"boolean"===n?String(e):e}const r=t?'"':"<",o=t?"&quot;":"&lt;";let s=e.indexOf(r),a=e.indexOf("&");if(s<0&&a<0)return e;let i=0,c="";for(;s>=0&&a>=0;)s<a?(i<s&&(c+=e.substring(i,s)),c+=o,i=s+1,s=e.indexOf(r,i)):(i<a&&(c+=e.substring(i,a)),c+="&amp;",i=a+1,a=e.indexOf("&",i));if(s>=0)do{i<s&&(c+=e.substring(i,s)),c+=o,i=s+1,s=e.indexOf(r,i)}while(s>=0);else for(;a>=0;)i<a&&(c+=e.substring(i,a)),c+="&amp;",i=a+1,a=e.indexOf("&",i);return i<e.length?c+e.substring(i):c}function de(e){const t=typeof e;if("string"===t)return e;if(null==e||"boolean"===t)return"";if(Array.isArray(e)){let t="";for(let n=0,r=e.length;n<r;n++)t+=de(e[n]);return t}return"object"===t?e.t:"function"===t?de(e()):String(e)}function pe(e){if(e.message){const t={},n=Object.getOwnPropertyNames(e);for(let r=0;r<n.length;r++){const o=n[r],s=e[o];(!s||"message"!==o&&"function"!=typeof s)&&(t[o]=s)}return`Object.assign(new Error(${U(e.message)}), ${U(t)})`}return U(e)}function fe(e,t,n,r=U){const o=e.get(n);return o?`_$HY.set("${t}", _$HY.r["${o}"][0])`:(null!==n&&"object"==typeof n&&e.set(n,t),`_$HY.set("${t}", ${r(n)})`)}const he=/^(?:[a-z0-9]+:)?\/\//i,ge=/^\/+|\/+$/g;function ye(e,t=!1){const n=e.replace(ge,"");return n?t||/^[?#]/.test(n)?n:"/"+n:""}function me(e,t,n){if(he.test(t))return;const r=ye(e),o=n&&ye(n);let s="";return s=!o||t.startsWith("/")?r:0!==o.toLowerCase().indexOf(r.toLowerCase())?r+o:o,(s||"/")+ye(t,!s)}function ve(e,t){return ye(e).replace(/\/*(\*.*)?$/g,"")+ye(t)}function we(e,t){return decodeURIComponent(t?e.replace(/\+/g," "):e)}function xe(e,t){const[n,r]=e.split("/*",2),o=n.split("/").filter(Boolean),s=o.length;return e=>{const n=e.split("/").filter(Boolean),a=n.length-s;if(a<0||a>0&&void 0===r&&!t)return null;const i={path:s?"":"/",params:{}};for(let e=0;e<s;e++){const t=o[e],r=n[e];if(":"===t[0])i.params[t.slice(1)]=r;else if(0!==t.localeCompare(r,void 0,{sensitivity:"base"}))return null;i.path+=`/${r}`}return r&&(i.params[r]=a?n.slice(-a).join("/"):""),i}}function be(e){const[t,n]=e.pattern.split("/*",2),r=t.split("/").filter(Boolean);return r.reduce(((e,t)=>e+(t.startsWith(":")?2:3)),r.length-(void 0===n?0:1))}function $e(e){const t=new Map,n=s;return new Proxy({},{get:(r,o)=>(t.has(o)||g(n,(()=>t.set(o,l((()=>e()[o]))))),t.get(o)()),getOwnPropertyDescriptor:()=>({enumerable:!0,configurable:!0}),ownKeys:()=>Reflect.ownKeys(e())})}function Pe(e){let t=/(\/?\:[^\/]+)\?/.exec(e);if(!t)return[e];let n=e.slice(0,t.index),r=e.slice(t.index+t[0].length);const o=[n,n+=t[1]];for(;t=/^(\/\:[^\/]+)\?/.exec(r);)o.push(n+=t[1]),r=r.slice(t[0].length);return Pe(r).reduce(((e,t)=>[...e,...o.map((e=>e+t))]),[])}const ke=p(),Oe=p(),je=()=>function(e,t){if(null==e)throw new Error(t);return e}(f(ke),"Make sure your app is wrapped in a <Router />");let Ae;const Ce=()=>Ae||f(Oe)||je().base;function Te(e,t="",n){const{component:r,data:o,children:s}=e,a=!s||Array.isArray(s)&&!s.length,i={key:e,element:r?()=>$(r,{}):()=>{const{element:t}=e;return void 0===t&&n?$(n,{}):t},preload:e.component?r.preload:e.preload,data:o};return Se(e.path).reduce(((e,n)=>{for(const r of Pe(n)){const n=ve(t,r),o=a?n:n.split("/*",1)[0];e.push({...i,originalPath:r,pattern:o,matcher:xe(o,!a)})}return e}),[])}function Re(e,t=0){return{routes:e,score:1e4*be(e[e.length-1])-t,matcher(t){const n=[];for(let r=e.length-1;r>=0;r--){const o=e[r],s=o.matcher(t);if(!s)return null;n.unshift({...s,route:o})}return n}}}function Se(e){return Array.isArray(e)?e:[e]}function Ee(e,t="",n,r=[],o=[]){const s=Se(e);for(let e=0,a=s.length;e<a;e++){const a=s[e];if(a&&"object"==typeof a&&a.hasOwnProperty("path")){const e=Te(a,t,n);for(const t of e){if(r.push(t),a.children)Ee(a.children,t.pattern,n,r,o);else{const e=Re([...r],o.length);o.push(e)}r.pop()}}}return r.length?o:o.sort(((e,t)=>t.score-e.score))}function Ne(e,t="",n,r){const{signal:[o,s],utils:a={}}=function(e){return e?Array.isArray(e)?{signal:e}:e:{signal:i({value:""})}}(e),p=a.parsePath||(e=>e),h=a.renderPath||(e=>e),g=me("",t),y=r?Object.assign(r,{matches:[],url:void 0}):void 0;if(void 0===g)throw new Error(`${g} is not a valid base path`);g&&!o().value&&s({value:g,replace:!0,scroll:!1});const[m,v]=[()=>!1,e=>{e()}],[w,x]=i(o().value),[b,$]=i(o().state),P=function(e,t){const n=new URL("http://sar"),r=l((t=>{const r=e();try{return new URL(r,n)}catch(e){return console.error(`Invalid path ${r}`),t}}),n),o=l((()=>we(r().pathname))),s=l((()=>we(r().search,!0))),a=l((()=>we(r().hash))),i=l((()=>""));return{get pathname(){return o()},get search(){return s()},get hash(){return a()},get state(){return t()},get key(){return i()},query:$e(d(s,(()=>function(e){const t={};return e.searchParams.forEach(((e,n)=>{t[n]=e})),t}(r()))))}}(w,b),k=[],O={pattern:g,params:{},path:()=>g,outlet:()=>null,resolvePath:e=>me(g,e)};if(n)try{Ae=O,O.data=n({data:void 0,params:{},location:P,navigate:j(O)})}finally{Ae=void 0}function j(e){return e=e||f(Oe)||O,(t,n)=>function(e,t,n){u((()=>{if("number"==typeof t)return void(t&&(a.go?a.go(t):console.warn("Router integration does not support relative routing")));const{replace:r,resolve:o,scroll:i,state:c}={replace:!1,resolve:!0,scroll:!0,...n},l=o?e.resolvePath(t):me("",t);if(void 0===l)throw new Error(`Path '${t}' is not a routable path`);if(k.length>=100)throw new Error("Too many redirects");l===w()&&c===b()||(y&&(y.url=l),s({value:l,replace:r,scroll:i,state:c}))}))}(e,t,n)}return c((()=>{const{value:e,state:t}=o();u((()=>{e!==w()&&v((()=>{x(e),$(t)}))}))})),{base:O,out:y,location:P,isRouting:m,renderPath:h,parsePath:p,navigatorFactory:j}}function He(e,t,n,r){const{base:o,location:s,navigatorFactory:a}=e,{pattern:i,element:c,preload:u,data:d}=r().route,p=l((()=>r().path)),f=$e((()=>r().params));u&&u();const h={parent:t,pattern:i,get child(){return n()},path:p,params:f,data:t.data,outlet:c,resolvePath:e=>me(o.path(),e,p())};if(d)try{Ae=h,h.data=d({data:t.data,params:f,location:s,navigate:a(h)})}finally{Ae=void 0}return h}const _e=e=>{const{source:t,url:n,base:r,data:o,out:s}=e;var a;const i=Ne(t||(a={value:n||""},{signal:[()=>a,e=>Object.assign(a,e)]}),r,o,s);return $(ke.Provider,{value:i,get children(){return e.children}})},Me=e=>{const t=je(),n=Ce(),r=h((()=>e.children)),o=l((()=>Ee(r(),ve(n.pattern,e.base||""),Le))),s=l((()=>function(e,t){for(let n=0,r=e.length;n<r;n++){const r=e[n].matcher(t);if(r)return r}return[]}(o(),t.location.pathname)));t.out&&t.out.matches.push(s().map((({route:e,path:t,params:n})=>({originalPath:e.originalPath,pattern:e.pattern,path:t,params:n}))));const i=[];let c;const u=l(d(s,((e,r,o)=>{let l=r&&e.length===r.length;const d=[];for(let c=0,p=e.length;c<p;c++){const p=r&&r[c],f=e[c];o&&p&&f.route.key===p.route.key?d[c]=o[c]:(l=!1,i[c]&&i[c](),a((e=>{i[c]=e,d[c]=He(t,d[c-1]||n,(()=>u()[c+1]),(()=>s()[c]))})))}return i.splice(e.length).forEach((e=>e())),o&&l?o:(c=d[0],d)})));return $(O,{get when(){return u()&&c},children:e=>$(Oe.Provider,{value:e,get children(){return e.outlet()}})})},Ie=e=>{const t=h((()=>e.children));return P(e,{get children(){return t()}})},Le=()=>{const e=Ce();return $(O,{get when(){return e.child},children:e=>$(Oe.Provider,{value:e,get children(){return e.outlet()}})})};function De(e){const[,t]=function(e,...t){const n=Object.getOwnPropertyDescriptors(e),r=e=>{const t={};for(let r=0;r<e.length;r++){const o=e[r];n[o]&&(Object.defineProperty(t,o,n[o]),delete n[o])}return t};return t.map(r).concat(r(Object.keys(n)))}(e,["children","to","href","state"]),n=(e=>{const t=je();return l((()=>{const n=e();return void 0!==n?t.renderPath(n):n}))})((()=>e.to));return function(e,t,n,r){let o=`<${e}${r?le():""} `;null==t?t={}:"function"==typeof t&&(t=t());const s=Object.keys(t);let a;for(let e=0;e<s.length;e++){const r=s[e];if(H.has(r)){void 0===n&&(n="innerHTML"===r?t[r]:ue(t[r]));continue}const i=t[r];if("style"===r)o+=`style="${ie(i)}"`;else if("class"===r||"className"===r||"classList"===r){if(a)continue;let e;o+=`class="${(e=t.class)?e+" ":""}${(e=t.className)?e+" ":""}${ae(t.classList)}"`,a=!0}else if(N.has(r)){if(!i)continue;o+=r}else{if(null==i||"ref"===r||"on"===r.slice(0,2))continue;o+=`${_[r]||r}="${ue(i,!0)}"`}e!==s.length-1&&(o+=" ")}return{t:o+`>${de(n)}</${e}>`}}("a",(()=>({...t,href:n()||e.href,state:JSON.stringify(e.state)})),(()=>ue(e.children)),!0)}function Ye(e){const t=(e=>{const t=Ce();return l((()=>t.resolvePath(e())))})((()=>e.href));return $(De,P(e,{get to(){return t()}}))}const We=p({hydratedData:{props:{},url:"/"},routeCache:new Map([])}),qe=()=>f(We);function Fe(e){{const t={hydratedData:{url:e.url,props:e.props.props},routeCache:new Map([])};return $(We.Provider,{value:t,get children(){return e.children}})}}function ze(e){const t=qe();e.location.pathname,console.log(e.location);const[n]=C((async()=>t.hydratedData.props));return n}function Be(e){const t=qe();e.params.id,e.location.pathname;const[n]=C((async()=>t.hydratedData.props));return n}const Ue=p(),Je=["title","meta"],Ve=e=>e.tag+(e.name?`.${e.name}"`:""),Ge=e=>{const t=new Map,n={addClientTag:e=>{let n=Ve(e);if(-1!==Je.indexOf(e.tag)){t.has(n)||t.set(n,[]);let r=t.get(n),o=r.length;return r=[...r,e],t.set(n,r),o}return-1},removeClientTag:(e,n)=>{const r=Ve(e);if(e.ref){const o=t.get(r);if(o){if(e.ref.parentNode){e.ref.parentNode.removeChild(e.ref);for(let e=n-1;e>=0;e--)null!=o[e]&&document.head.appendChild(o[e].ref)}o[n]=null,t.set(r,o)}else e.ref.parentNode&&e.ref.parentNode.removeChild(e.ref)}},addServerTag:t=>{const{tags:n=[]}=e;if(-1!==Je.indexOf(t.tag)){const e=n.findIndex((e=>{const n=e.props.name||e.props.property,r=t.props.name||t.props.property;return e.tag===t.tag&&n===r}));-1!==e&&n.splice(e,1)}n.push(t)}};if(!1===Array.isArray(e.tags))throw Error("tags array should be passed to <MetaProvider /> in node");return $(Ue.Provider,{value:n,get children(){return e.children}})},Ke=(e,t)=>{const n=function(){const e=x.context;if(!e)throw new Error("createUniqueId cannot be used under non-hydrating context");return`${e.id}${e.count++}`}();if(!f(Ue))throw new Error("<MetaProvider /> should be in the tree");return function(e){const{addClientTag:t,removeClientTag:n,addServerTag:r}=f(Ue);c((()=>{0})),r(e)}({tag:e,props:t,id:n,get name(){return t.name||t.property}}),null};const Qe=e=>Ke("title",e);function Ze(e){return()=>{const t=Ce().data,n=l((()=>t()));return $(O,{get when(){return n()},keyed:!0,get children(){return $(e,P(n))}})}}const Xe=["<button",">Add New</button>"],et=["<div",' style="','">',"</div>"],tt=["<div",'><h1 style="','">','</h1><p style="','">',"</p>\x3c!--#--\x3e","\x3c!--/--\x3e</div>"];var nt=Ze((function(e){return[$(Qe,{children:"Home Page"}),$(k,{each:e,children:e=>se(tt,le(),"word-break:break-all",ue(e.title),"word-break:break-all",ue(e.description),ue($(Ye,{get href(){return`/post/${e.id}`},children:"Read"})))}),se(et,le(),"margin:4rem 0",ue($(Ye,{href:"/add",get children(){return se(Xe,le())}})))]}));const rt=["<div",">\x3c!--#--\x3e","\x3c!--/--\x3e<h1>","</h1><p>","</p><p>","</p>\x3c!--#--\x3e","\x3c!--/--\x3e</div>"];var ot=Ze((function(e){return se(rt,le(),ue($(Qe,{get children(){return["Post - ",e.title]}})),ue(e.title),ue(e.description),e.html,ue($(Ye,{href:"/",children:"Back"})))}));const st=["<div",'><div class="field-row-stacked" style="width: 200px"><label for="text18">Id</label><input',' id="text18" type="text"></div><div class="field-row-stacked" style="width: 200px"><label for="text18">Title</label><input',' id="text18" type="text"></div><div class="field-row-stacked" style="width: 200px"><label for="text19">Description</label><input',' id="text19" type="text"></div><div class="field-row-stacked" style="width: 200px"><label for="text20">HTML</label><textarea',' id="text20" rows="8"></textarea></div><button style="','">Submit</button><div>',"</div></div>"];const at=['<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="https://unpkg.com/98.css@0.1.18/dist/98.css"><link rel="stylesheet" href="/assets/styles.css">',"","</head>"],it=["<script",' id="SSR_DATA" type="application/json">',"<\/script>"],ct=["<script",' type="module" src="/js/index-v1.js" async><\/script>'],lt=["<html",' lang="en">','<body><div id="app">',"</div></body>\x3c!--#--\x3e","\x3c!--/--\x3e</html>"],ut=nt,dt=ot,pt=function(){const[e,t]=i(""),[n,r]=i(""),[o,s]=i(""),[a,c]=i("");return je().navigatorFactory(),qe(),se(st,le(),ce("value",ue(e(),!0),!1),ce("value",ue(n(),!0),!1),ce("value",ue(o(),!0),!1),ce("value",ue(a(),!0),!1),"margin:2rem 0",ue($(Ye,{href:"/",children:"Back"})))};function ft(){const e=qe(),t=[],n=$(Ge,{tags:t,get children(){return $(_e,{get url(){return e.hydratedData.url},get children(){return $(S,{get children(){return $(Me,{get children(){return[$(Ie,{path:"/",data:ze,component:ut}),$(Ie,{path:"/add",component:pt}),$(Ie,{path:"/post/:id",data:Be,component:dt})]}})}})}})}});return se(lt,le(),oe({get children(){return se(at,ue($(ne,{get children(){return function(e){return e.map((e=>{const t=Object.keys(e.props).map((t=>"children"===t?"":` ${t}="${e.props[t]}"`)).join("");return e.props.children?`<${e.tag} data-sm="${e.id}"${t}>${Array.isArray(e.props.children)?e.props.children.join(""):e.props.children}</${e.tag}>`:`<${e.tag} data-sm="${e.id}"${t}/>`})).join("")}(t)}})),ue($(re,{})))}}),ue(n),ue($(oe,{get children(){return[se(it,le(),ue(JSON.stringify(e.hydratedData))),se(ct,le())]}})))}function ht(e){return $(Fe,{get props(){return e.props},get url(){return e.url},get children(){return $(ft,{})}})}async function gt(e){const t=new URL(e.url),n={props:(await async function(){const e=new Headers;e.append("Authorization",`Bearer ${GRAPHCMS_API_KEY}`),e.append("Content-Type","application/json");const t={method:"POST",headers:e,body:JSON.stringify({query:"\nquery QueryPosts {\n  posts {\n    title\n    postId\n    html\n    description\n  }\n}\n",variables:{}}),redirect:"follow",cf:{cacheEverything:!0,cacheTtl:5}};try{const e=await fetch(GRAPHCMS_CONTENT_ENDPOINT,t),n=await e.json();return n&&n.data&&n.data.posts?n.data.posts:[]}catch(e){return[]}}()).map((e=>({id:e.postId,html:e.html,title:e.title,description:e.description})))};if("/index.props.json"==t.pathname)return console.log("Responded with home page props"),new Response(JSON.stringify(n),{headers:{"Content-Type":"application/json","Cache-Control":"max-age=0, must-revalidate"},status:200});const r=await ee((()=>$(ht,{url:"/",props:n})));return console.log("Responded with home page html page"),new Response("<!DOCTYPE html>"+r,{headers:{"Content-Type":"text/html","Cache-Control":"max-age=0, must-revalidate"},status:200})}const yt=function({base:e="",routes:t=[]}={}){return{__proto__:new Proxy({},{get:(n,r,o)=>(n,...s)=>t.push([r.toUpperCase(),RegExp(`^${(e+n).replace(/(\/?)\*/g,"($1.*)?").replace(/(\/$)|((?<=\/)\/)/,"").replace(/:(\w+)(\?)?(\.)?/g,"$2(?<$1>[^/]+)$2$3").replace(/\.(?=[\w(])/,"\\.").replace(/\)\.\?\(([^\[]+)\[\^/g,"?)\\.?($1(?<=\\.)[^\\.")}/*$`),s])&&o}),routes:t,async handle(e,...n){let r,o,s=new URL(e.url);for(var[a,i,c]of(e.query=Object.fromEntries(s.searchParams),t))if((a===e.method||"ALL"===a)&&(o=s.pathname.match(i)))for(var l of(e.params=o.groups,c))if(void 0!==(r=await l(e.proxy||e,...n)))return r}}}();yt.get("/$",gt).get("/index.props.json",gt),yt.get("/post/:id",(async function(e){if(null==e.params||!e.params.id)return new Response("No post id param received!",{status:400});const t=e.params.id.endsWith(".props.json");t&&(e.params.id=e.params.id.slice(0,e.params.id.length-".props.json".length));const n=e.params.id;if(n.length<1)return new Response(null,{status:400});const r=await async function(e){const t=new Headers;t.append("Authorization",`Bearer ${GRAPHCMS_API_KEY}`),t.append("Content-Type","application/json");const n={method:"POST",headers:t,body:JSON.stringify({query:"\nquery QueryPosts($id: String) {\n  post:apiPosts(where: {postId: $id}) {\n    id\n    html\n    description\n    postId\n    title\n  }\n}\n",variables:{id:e}}),redirect:"follow",cf:{cacheEverything:!0,cacheTtl:5}};try{const e=await fetch(GRAPHCMS_CONTENT_ENDPOINT,n),t=await e.json();return t&&t.data&&t.data.post?t.data.post:null}catch(e){return null}}(n);if(!r)return new Response(null,{status:404});const o={props:r};if(t)return console.log(`Responded to ${n} post props`),new Response(JSON.stringify(o),{status:200,headers:{"Content-Type":"application/json","Cache-Control":"max-age=0, must-revalidate"}});const s=await ee((()=>$(ht,{props:o,url:`/post/${n}`})));return console.log(`Responded to ${n} html page`),new Response("<!DOCTYPE html>"+s,{status:200,headers:{"Content-Type":"text/html","Cache-Control":"max-age=0, must-revalidate"}})})),yt.get("/add",(async function(e){const t=await ee((()=>$(ht,{url:"/add",props:{}})));return console.log("Responded to add html page"),new Response("<!DOCTYPE html>"+t,{headers:{"Content-Type":"text/html","Cache-Control":"max-age: 120"},status:200})})),yt.get("*",(()=>new Response("404 Not found",{status:404}))),addEventListener("fetch",(async e=>{e.respondWith(yt.handle(e.request))}));
+import { isServer, createComponent as createComponent$1, mergeProps, ssrElement, escape, spread, ssr, ssrHydrationKey, ssrAttribute, NoHydration, Assets, HydrationScript, renderToStringAsync } from 'solid-js/web';
+import { createSignal, onCleanup, getOwner, runWithOwner, createMemo, createContext, useContext, useTransition, createRenderEffect, untrack, createComponent, on, resetErrorBoundaries, splitProps, children, createRoot, Show, mergeProps as mergeProps$1, createResource, createUniqueId, sharedConfig, For, lazy, Suspense } from 'solid-js';
+
+function e({
+  base: t = "",
+  routes: n = []
+} = {}) {
+  return {
+    __proto__: new Proxy({}, {
+      get: (e, a, o) => (e, ...r) => n.push([a.toUpperCase(), RegExp(`^${(t + e).replace(/(\/?)\*/g, "($1.*)?").replace(/(\/$)|((?<=\/)\/)/, "").replace(/:(\w+)(\?)?(\.)?/g, "$2(?<$1>[^/]+)$2$3").replace(/\.(?=[\w(])/, "\\.").replace(/\)\.\?\(([^\[]+)\[\^/g, "?)\\.?($1(?<=\\.)[^\\.")}/*$`), r]) && o
+    }),
+    routes: n,
+    async handle(e, ...r) {
+      let a,
+        o,
+        t = new URL(e.url);
+      e.query = Object.fromEntries(t.searchParams);
+      for (var [p, s, u] of n) if ((p === e.method || "ALL" === p) && (o = t.pathname.match(s))) {
+        e.params = o.groups;
+        for (var c of u) if (void 0 !== (a = await c(e.proxy || e, ...r))) return a;
+      }
+    }
+  };
+}
+
+function bindEvent(target, type, handler) {
+  target.addEventListener(type, handler);
+  return () => target.removeEventListener(type, handler);
+}
+function intercept([value, setValue], get, set) {
+  return [get ? () => get(value()) : value, set ? v => setValue(set(v)) : setValue];
+}
+function querySelector(selector) {
+  // Guard against selector being an invalid CSS selector
+  try {
+    return document.querySelector(selector);
+  } catch (e) {
+    return null;
+  }
+}
+function scrollToHash(hash, fallbackTop) {
+  const el = querySelector(`#${hash}`);
+  if (el) {
+    el.scrollIntoView();
+  } else if (fallbackTop) {
+    window.scrollTo(0, 0);
+  }
+}
+function createIntegration(get, set, init, utils) {
+  let ignore = false;
+  const wrap = value => typeof value === "string" ? {
+    value
+  } : value;
+  const signal = intercept(createSignal(wrap(get()), {
+    equals: (a, b) => a.value === b.value
+  }), undefined, next => {
+    !ignore && set(next);
+    return next;
+  });
+  init && onCleanup(init((value = get()) => {
+    ignore = true;
+    signal[1](wrap(value));
+    ignore = false;
+  }));
+  return {
+    signal,
+    utils
+  };
+}
+function normalizeIntegration(integration) {
+  if (!integration) {
+    return {
+      signal: createSignal({
+        value: ""
+      })
+    };
+  } else if (Array.isArray(integration)) {
+    return {
+      signal: integration
+    };
+  }
+  return integration;
+}
+function staticIntegration(obj) {
+  return {
+    signal: [() => obj, next => Object.assign(obj, next)]
+  };
+}
+function pathIntegration() {
+  return createIntegration(() => ({
+    value: window.location.pathname + window.location.search + window.location.hash,
+    state: history.state
+  }), ({
+    value,
+    replace,
+    scroll,
+    state
+  }) => {
+    if (replace) {
+      window.history.replaceState(state, "", value);
+    } else {
+      window.history.pushState(state, "", value);
+    }
+    scrollToHash(window.location.hash.slice(1), scroll);
+  }, notify => bindEvent(window, "popstate", () => notify()), {
+    go: delta => window.history.go(delta)
+  });
+}
+
+const hasSchemeRegex = /^(?:[a-z0-9]+:)?\/\//i;
+const trimPathRegex = /^\/+|\/+$/g;
+function normalize(path, omitSlash = false) {
+  const s = path.replace(trimPathRegex, "");
+  return s ? omitSlash || /^[?#]/.test(s) ? s : "/" + s : "";
+}
+function resolvePath(base, path, from) {
+  if (hasSchemeRegex.test(path)) {
+    return undefined;
+  }
+  const basePath = normalize(base);
+  const fromPath = from && normalize(from);
+  let result = "";
+  if (!fromPath || path.startsWith("/")) {
+    result = basePath;
+  } else if (fromPath.toLowerCase().indexOf(basePath.toLowerCase()) !== 0) {
+    result = basePath + fromPath;
+  } else {
+    result = fromPath;
+  }
+  return (result || "/") + normalize(path, !result);
+}
+function invariant(value, message) {
+  if (value == null) {
+    throw new Error(message);
+  }
+  return value;
+}
+function joinPaths(from, to) {
+  return normalize(from).replace(/\/*(\*.*)?$/g, "") + normalize(to);
+}
+function extractSearchParams(url) {
+  const params = {};
+  url.searchParams.forEach((value, key) => {
+    params[key] = value;
+  });
+  return params;
+}
+function urlDecode(str, isQuery) {
+  return decodeURIComponent(isQuery ? str.replace(/\+/g, " ") : str);
+}
+function createMatcher(path, partial) {
+  const [pattern, splat] = path.split("/*", 2);
+  const segments = pattern.split("/").filter(Boolean);
+  const len = segments.length;
+  return location => {
+    const locSegments = location.split("/").filter(Boolean);
+    const lenDiff = locSegments.length - len;
+    if (lenDiff < 0 || lenDiff > 0 && splat === undefined && !partial) {
+      return null;
+    }
+    const match = {
+      path: len ? "" : "/",
+      params: {}
+    };
+    for (let i = 0; i < len; i++) {
+      const segment = segments[i];
+      const locSegment = locSegments[i];
+      if (segment[0] === ":") {
+        match.params[segment.slice(1)] = locSegment;
+      } else if (segment.localeCompare(locSegment, undefined, {
+        sensitivity: "base"
+      }) !== 0) {
+        return null;
+      }
+      match.path += `/${locSegment}`;
+    }
+    if (splat) {
+      match.params[splat] = lenDiff ? locSegments.slice(-lenDiff).join("/") : "";
+    }
+    return match;
+  };
+}
+function scoreRoute(route) {
+  const [pattern, splat] = route.pattern.split("/*", 2);
+  const segments = pattern.split("/").filter(Boolean);
+  return segments.reduce((score, segment) => score + (segment.startsWith(":") ? 2 : 3), segments.length - (splat === undefined ? 0 : 1));
+}
+function createMemoObject(fn) {
+  const map = new Map();
+  const owner = getOwner();
+  return new Proxy({}, {
+    get(_, property) {
+      if (!map.has(property)) {
+        runWithOwner(owner, () => map.set(property, createMemo(() => fn()[property])));
+      }
+      return map.get(property)();
+    },
+    getOwnPropertyDescriptor() {
+      return {
+        enumerable: true,
+        configurable: true
+      };
+    },
+    ownKeys() {
+      return Reflect.ownKeys(fn());
+    }
+  });
+}
+function expandOptionals(pattern) {
+  let match = /(\/?\:[^\/]+)\?/.exec(pattern);
+  if (!match) return [pattern];
+  let prefix = pattern.slice(0, match.index);
+  let suffix = pattern.slice(match.index + match[0].length);
+  const prefixes = [prefix, prefix += match[1]];
+  // This section handles adjacent optional params. We don't actually want all permuations since
+  // that will lead to equivalent routes which have the same number of params. For example
+  // `/:a?/:b?/:c`? only has the unique expansion: `/`, `/:a`, `/:a/:b`, `/:a/:b/:c` and we can
+  // discard `/:b`, `/:c`, `/:b/:c` by building them up in order and not recursing. This also helps
+  // ensure predictability where earlier params have precidence.
+  while (match = /^(\/\:[^\/]+)\?/.exec(suffix)) {
+    prefixes.push(prefix += match[1]);
+    suffix = suffix.slice(match[0].length);
+  }
+  return expandOptionals(suffix).reduce((results, expansion) => [...results, ...prefixes.map(p => p + expansion)], []);
+}
+
+const MAX_REDIRECTS = 100;
+const RouterContextObj = createContext();
+const RouteContextObj = createContext();
+const useRouter = () => invariant(useContext(RouterContextObj), "Make sure your app is wrapped in a <Router />");
+let TempRoute;
+const useRoute = () => TempRoute || useContext(RouteContextObj) || useRouter().base;
+const useResolvedPath = path => {
+  const route = useRoute();
+  return createMemo(() => route.resolvePath(path()));
+};
+const useHref = to => {
+  const router = useRouter();
+  return createMemo(() => {
+    const to_ = to();
+    return to_ !== undefined ? router.renderPath(to_) : to_;
+  });
+};
+const useNavigate = () => useRouter().navigatorFactory();
+const useRouteData = () => useRoute().data;
+function createRoutes(routeDef, base = "", fallback) {
+  const {
+    component,
+    data,
+    children
+  } = routeDef;
+  const isLeaf = !children || Array.isArray(children) && !children.length;
+  const shared = {
+    key: routeDef,
+    element: component ? () => createComponent(component, {}) : () => {
+      const {
+        element
+      } = routeDef;
+      return element === undefined && fallback ? createComponent(fallback, {}) : element;
+    },
+    preload: routeDef.component ? component.preload : routeDef.preload,
+    data
+  };
+  return asArray(routeDef.path).reduce((acc, path) => {
+    for (const originalPath of expandOptionals(path)) {
+      const path = joinPaths(base, originalPath);
+      const pattern = isLeaf ? path : path.split("/*", 1)[0];
+      acc.push({
+        ...shared,
+        originalPath,
+        pattern,
+        matcher: createMatcher(pattern, !isLeaf)
+      });
+    }
+    return acc;
+  }, []);
+}
+function createBranch(routes, index = 0) {
+  return {
+    routes,
+    score: scoreRoute(routes[routes.length - 1]) * 10000 - index,
+    matcher(location) {
+      const matches = [];
+      for (let i = routes.length - 1; i >= 0; i--) {
+        const route = routes[i];
+        const match = route.matcher(location);
+        if (!match) {
+          return null;
+        }
+        matches.unshift({
+          ...match,
+          route
+        });
+      }
+      return matches;
+    }
+  };
+}
+function asArray(value) {
+  return Array.isArray(value) ? value : [value];
+}
+function createBranches(routeDef, base = "", fallback, stack = [], branches = []) {
+  const routeDefs = asArray(routeDef);
+  for (let i = 0, len = routeDefs.length; i < len; i++) {
+    const def = routeDefs[i];
+    if (def && typeof def === "object" && def.hasOwnProperty("path")) {
+      const routes = createRoutes(def, base, fallback);
+      for (const route of routes) {
+        stack.push(route);
+        if (def.children) {
+          createBranches(def.children, route.pattern, fallback, stack, branches);
+        } else {
+          const branch = createBranch([...stack], branches.length);
+          branches.push(branch);
+        }
+        stack.pop();
+      }
+    }
+  }
+  // Stack will be empty on final return
+  return stack.length ? branches : branches.sort((a, b) => b.score - a.score);
+}
+function getRouteMatches(branches, location) {
+  for (let i = 0, len = branches.length; i < len; i++) {
+    const match = branches[i].matcher(location);
+    if (match) {
+      return match;
+    }
+  }
+  return [];
+}
+function createLocation(path, state) {
+  const origin = new URL("http://sar");
+  const url = createMemo(prev => {
+    const path_ = path();
+    try {
+      return new URL(path_, origin);
+    } catch (err) {
+      console.error(`Invalid path ${path_}`);
+      return prev;
+    }
+  }, origin, {
+    equals: (a, b) => a.href === b.href
+  });
+  const pathname = createMemo(() => urlDecode(url().pathname));
+  const search = createMemo(() => urlDecode(url().search, true));
+  const hash = createMemo(() => urlDecode(url().hash));
+  const key = createMemo(() => "");
+  return {
+    get pathname() {
+      return pathname();
+    },
+    get search() {
+      return search();
+    },
+    get hash() {
+      return hash();
+    },
+    get state() {
+      return state();
+    },
+    get key() {
+      return key();
+    },
+    query: createMemoObject(on(search, () => extractSearchParams(url())))
+  };
+}
+function createRouterContext(integration, base = "", data, out) {
+  const {
+    signal: [source, setSource],
+    utils = {}
+  } = normalizeIntegration(integration);
+  const parsePath = utils.parsePath || (p => p);
+  const renderPath = utils.renderPath || (p => p);
+  const basePath = resolvePath("", base);
+  const output = isServer && out ? Object.assign(out, {
+    matches: [],
+    url: undefined
+  }) : undefined;
+  if (basePath === undefined) {
+    throw new Error(`${basePath} is not a valid base path`);
+  } else if (basePath && !source().value) {
+    setSource({
+      value: basePath,
+      replace: true,
+      scroll: false
+    });
+  }
+  const [isRouting, start] = useTransition();
+  const [reference, setReference] = createSignal(source().value);
+  const [state, setState] = createSignal(source().state);
+  const location = createLocation(reference, state);
+  const referrers = [];
+  const baseRoute = {
+    pattern: basePath,
+    params: {},
+    path: () => basePath,
+    outlet: () => null,
+    resolvePath(to) {
+      return resolvePath(basePath, to);
+    }
+  };
+  if (data) {
+    try {
+      TempRoute = baseRoute;
+      baseRoute.data = data({
+        data: undefined,
+        params: {},
+        location,
+        navigate: navigatorFactory(baseRoute)
+      });
+    } finally {
+      TempRoute = undefined;
+    }
+  }
+  function navigateFromRoute(route, to, options) {
+    // Untrack in case someone navigates in an effect - don't want to track `reference` or route paths
+    untrack(() => {
+      if (typeof to === "number") {
+        if (!to) ; else if (utils.go) {
+          utils.go(to);
+        } else {
+          console.warn("Router integration does not support relative routing");
+        }
+        return;
+      }
+      const {
+        replace,
+        resolve,
+        scroll,
+        state: nextState
+      } = {
+        replace: false,
+        resolve: true,
+        scroll: true,
+        ...options
+      };
+      const resolvedTo = resolve ? route.resolvePath(to) : resolvePath("", to);
+      if (resolvedTo === undefined) {
+        throw new Error(`Path '${to}' is not a routable path`);
+      } else if (referrers.length >= MAX_REDIRECTS) {
+        throw new Error("Too many redirects");
+      }
+      const current = reference();
+      if (resolvedTo !== current || nextState !== state()) {
+        if (isServer) {
+          if (output) {
+            output.url = resolvedTo;
+          }
+          setSource({
+            value: resolvedTo,
+            replace,
+            scroll,
+            state: nextState
+          });
+        } else {
+          const len = referrers.push({
+            value: current,
+            replace,
+            scroll,
+            state: state()
+          });
+          start(() => {
+            setReference(resolvedTo);
+            setState(nextState);
+            resetErrorBoundaries();
+          }).then(() => {
+            if (referrers.length === len) {
+              navigateEnd({
+                value: resolvedTo,
+                state: nextState
+              });
+            }
+          });
+        }
+      }
+    });
+  }
+  function navigatorFactory(route) {
+    // Workaround for vite issue (https://github.com/vitejs/vite/issues/3803)
+    route = route || useContext(RouteContextObj) || baseRoute;
+    return (to, options) => navigateFromRoute(route, to, options);
+  }
+  function navigateEnd(next) {
+    const first = referrers[0];
+    if (first) {
+      if (next.value !== first.value || next.state !== first.state) {
+        setSource({
+          ...next,
+          replace: first.replace,
+          scroll: first.scroll
+        });
+      }
+      referrers.length = 0;
+    }
+  }
+  createRenderEffect(() => {
+    const {
+      value,
+      state
+    } = source();
+    // Untrack this whole block so `start` doesn't cause Solid's Listener to be preserved
+    untrack(() => {
+      if (value !== reference()) {
+        start(() => {
+          setReference(value);
+          setState(state);
+        });
+      }
+    });
+  });
+  if (!isServer) {
+    function isSvg(el) {
+      return el.namespaceURI === "http://www.w3.org/2000/svg";
+    }
+    function handleAnchorClick(evt) {
+      if (evt.defaultPrevented || evt.button !== 0 || evt.metaKey || evt.altKey || evt.ctrlKey || evt.shiftKey) return;
+      const a = evt.composedPath().find(el => el instanceof Node && el.nodeName.toUpperCase() === "A");
+      if (!a) return;
+      const svg = isSvg(a);
+      const href = svg ? a.href.baseVal : a.href;
+      const target = svg ? a.target.baseVal : a.target;
+      if (target || !href && !a.hasAttribute("state")) return;
+      const rel = (a.getAttribute("rel") || "").split(/\s+/);
+      if (a.hasAttribute("download") || rel && rel.includes("external")) return;
+      const url = svg ? new URL(href, document.baseURI) : new URL(href);
+      const pathname = urlDecode(url.pathname);
+      if (url.origin !== window.location.origin || basePath && pathname && !pathname.toLowerCase().startsWith(basePath.toLowerCase())) return;
+      const to = parsePath(pathname + urlDecode(url.search, true) + urlDecode(url.hash));
+      const state = a.getAttribute("state");
+      evt.preventDefault();
+      navigateFromRoute(baseRoute, to, {
+        resolve: false,
+        replace: a.hasAttribute("replace"),
+        scroll: !a.hasAttribute("noscroll"),
+        state: state && JSON.parse(state)
+      });
+    }
+    document.addEventListener("click", handleAnchorClick);
+    onCleanup(() => document.removeEventListener("click", handleAnchorClick));
+  }
+  return {
+    base: baseRoute,
+    out: output,
+    location,
+    isRouting,
+    renderPath,
+    parsePath,
+    navigatorFactory
+  };
+}
+function createRouteContext(router, parent, child, match) {
+  const {
+    base,
+    location,
+    navigatorFactory
+  } = router;
+  const {
+    pattern,
+    element: outlet,
+    preload,
+    data
+  } = match().route;
+  const path = createMemo(() => match().path);
+  const params = createMemoObject(() => match().params);
+  preload && preload();
+  const route = {
+    parent,
+    pattern,
+    get child() {
+      return child();
+    },
+    path,
+    params,
+    data: parent.data,
+    outlet,
+    resolvePath(to) {
+      return resolvePath(base.path(), to, path());
+    }
+  };
+  if (data) {
+    try {
+      TempRoute = route;
+      route.data = data({
+        data: parent.data,
+        params,
+        location,
+        navigate: navigatorFactory(route)
+      });
+    } finally {
+      TempRoute = undefined;
+    }
+  }
+  return route;
+}
+
+const Router = props => {
+  const {
+    source,
+    url,
+    base,
+    data,
+    out
+  } = props;
+  const integration = source || (isServer ? staticIntegration({
+    value: url || ""
+  }) : pathIntegration());
+  const routerState = createRouterContext(integration, base, data, out);
+  return createComponent$1(RouterContextObj.Provider, {
+    value: routerState,
+    get children() {
+      return props.children;
+    }
+  });
+};
+const Routes = props => {
+  const router = useRouter();
+  const parentRoute = useRoute();
+  const routeDefs = children(() => props.children);
+  const branches = createMemo(() => createBranches(routeDefs(), joinPaths(parentRoute.pattern, props.base || ""), Outlet));
+  const matches = createMemo(() => getRouteMatches(branches(), router.location.pathname));
+  if (router.out) {
+    router.out.matches.push(matches().map(({
+      route,
+      path,
+      params
+    }) => ({
+      originalPath: route.originalPath,
+      pattern: route.pattern,
+      path,
+      params
+    })));
+  }
+  const disposers = [];
+  let root;
+  const routeStates = createMemo(on(matches, (nextMatches, prevMatches, prev) => {
+    let equal = prevMatches && nextMatches.length === prevMatches.length;
+    const next = [];
+    for (let i = 0, len = nextMatches.length; i < len; i++) {
+      const prevMatch = prevMatches && prevMatches[i];
+      const nextMatch = nextMatches[i];
+      if (prev && prevMatch && nextMatch.route.key === prevMatch.route.key) {
+        next[i] = prev[i];
+      } else {
+        equal = false;
+        if (disposers[i]) {
+          disposers[i]();
+        }
+        createRoot(dispose => {
+          disposers[i] = dispose;
+          next[i] = createRouteContext(router, next[i - 1] || parentRoute, () => routeStates()[i + 1], () => matches()[i]);
+        });
+      }
+    }
+    disposers.splice(nextMatches.length).forEach(dispose => dispose());
+    if (prev && equal) {
+      return prev;
+    }
+    root = next[0];
+    return next;
+  }));
+  return createComponent$1(Show, {
+    get when() {
+      return routeStates() && root;
+    },
+    children: route => createComponent$1(RouteContextObj.Provider, {
+      value: route,
+      get children() {
+        return route.outlet();
+      }
+    })
+  });
+};
+const Route = props => {
+  const childRoutes = children(() => props.children);
+  return mergeProps$1(props, {
+    get children() {
+      return childRoutes();
+    }
+  });
+};
+const Outlet = () => {
+  const route = useRoute();
+  return createComponent$1(Show, {
+    get when() {
+      return route.child;
+    },
+    children: child => createComponent$1(RouteContextObj.Provider, {
+      value: child,
+      get children() {
+        return child.outlet();
+      }
+    })
+  });
+};
+function LinkBase(props) {
+  const [, rest] = splitProps(props, ["children", "to", "href", "state"]);
+  const href = useHref(() => props.to);
+  return ssrElement("a", () => ({
+    ...rest,
+    "href": href() || props.href,
+    "state": JSON.stringify(props.state)
+  }), () => escape(props.children), true);
+}
+function Link(props) {
+  const to = useResolvedPath(() => props.href);
+  return createComponent$1(LinkBase, mergeProps(props, {
+    get to() {
+      return to();
+    }
+  }));
+}
+
+const HydrationContext = createContext({
+  hydratedData: {
+    props: {},
+    url: "/"
+  },
+  routeCache: new Map([])
+});
+const useHydration = () => useContext(HydrationContext);
+function HydrationProvider(p) {
+  if (!isServer) {
+    const Element = document.getElementById("SSR_DATA");
+    if (Element == null || Element.textContent == null) throw new Error("Element or Element text null");
+    const Json = JSON.parse(Element.textContent);
+    const value = {
+      hydratedData: {
+        props: Json.props,
+        url: Json.url
+      },
+      routeCache: new Map([[Json.url, Json.props]])
+    };
+    !isServer && console.log(value.routeCache);
+    return createComponent$1(HydrationContext.Provider, {
+      value: value,
+      get children() {
+        return p.children;
+      }
+    });
+  } else {
+    const value = {
+      hydratedData: {
+        url: p.url,
+        props: p.props.props // Close your eyes please
+      },
+
+      routeCache: new Map([])
+    };
+    return createComponent$1(HydrationContext.Provider, {
+      value: value,
+      get children() {
+        return p.children;
+      }
+    });
+  }
+}
+
+function HomeData(route) {
+  const ctx = useHydration();
+  const pathname = route.location.pathname;
+  const [homePosts] = createResource(async () => {
+    if (isServer) {
+      return ctx.hydratedData.props;
+    }
+    const cached = ctx.routeCache.get(pathname);
+    if (cached) {
+      return cached;
+    }
+    const NavigateResponse = await fetch(`/index.props.json`);
+    const NavigateProps = await NavigateResponse.json();
+    const Props = NavigateProps.props;
+    ctx.routeCache.set(pathname, Props);
+    !isServer && console.log(ctx.routeCache);
+    return Props;
+  });
+  return homePosts;
+}
+
+function PostData(route) {
+  const ctx = useHydration();
+  const id = route.params.id;
+  const pathname = route.location.pathname;
+
+  // CLOSURE TRAP -> route param will be different or even random
+  const [post] = createResource(async () => {
+    if (isServer) {
+      return ctx.hydratedData.props;
+    }
+    const cached = ctx.routeCache.get(pathname);
+    if (cached) {
+      return cached;
+    }
+    const NavigateResponse = await fetch(`/post/${id}.props.json`);
+    const NavigateProps = await NavigateResponse.json();
+    const Props = NavigateProps.props;
+    ctx.routeCache.set(pathname, Props);
+    !isServer && console.log(ctx.routeCache);
+    return Props;
+  });
+  return post;
+}
+
+const MetaContext = createContext();
+const cascadingTags = ["title", "meta"];
+const getTagType = tag => tag.tag + (tag.name ? `.${tag.name}"` : "");
+const MetaProvider = props => {
+  if (!isServer && !sharedConfig.context) {
+    const ssrTags = document.head.querySelectorAll(`[data-sm]`);
+    // `forEach` on `NodeList` is not supported in Googlebot, so use a workaround
+    Array.prototype.forEach.call(ssrTags, ssrTag => ssrTag.parentNode.removeChild(ssrTag));
+  }
+  const cascadedTagInstances = new Map();
+  // TODO: use one element for all tags of the same type, just swap out
+  // where the props get applied
+  function getElement(tag) {
+    if (tag.ref) {
+      return tag.ref;
+    }
+    let el = document.querySelector(`[data-sm="${tag.id}"]`);
+    if (el) {
+      if (el.tagName.toLowerCase() !== tag.tag) {
+        if (el.parentNode) {
+          // remove the old tag
+          el.parentNode.removeChild(el);
+        }
+        // add the new tag
+        el = document.createElement(tag.tag);
+      }
+      // use the old tag
+      el.removeAttribute("data-sm");
+    } else {
+      // create a new tag
+      el = document.createElement(tag.tag);
+    }
+    return el;
+  }
+  const actions = {
+    addClientTag: tag => {
+      let tagType = getTagType(tag);
+      if (cascadingTags.indexOf(tag.tag) !== -1) {
+        //  only cascading tags need to be kept as singletons
+        if (!cascadedTagInstances.has(tagType)) {
+          cascadedTagInstances.set(tagType, []);
+        }
+        let instances = cascadedTagInstances.get(tagType);
+        let index = instances.length;
+        instances = [...instances, tag];
+        // track indices synchronously
+        cascadedTagInstances.set(tagType, instances);
+        if (!isServer) {
+          let element = getElement(tag);
+          tag.ref = element;
+          spread(element, tag.props);
+          let lastVisited = null;
+          for (var i = index - 1; i >= 0; i--) {
+            if (instances[i] != null) {
+              lastVisited = instances[i];
+              break;
+            }
+          }
+          if (element.parentNode != document.head) {
+            document.head.appendChild(element);
+          }
+          if (lastVisited && lastVisited.ref) {
+            document.head.removeChild(lastVisited.ref);
+          }
+        }
+        return index;
+      }
+      if (!isServer) {
+        let element = getElement(tag);
+        tag.ref = element;
+        spread(element, tag.props);
+        if (element.parentNode != document.head) {
+          document.head.appendChild(element);
+        }
+      }
+      return -1;
+    },
+    removeClientTag: (tag, index) => {
+      const tagName = getTagType(tag);
+      if (tag.ref) {
+        const t = cascadedTagInstances.get(tagName);
+        if (t) {
+          if (tag.ref.parentNode) {
+            tag.ref.parentNode.removeChild(tag.ref);
+            for (let i = index - 1; i >= 0; i--) {
+              if (t[i] != null) {
+                document.head.appendChild(t[i].ref);
+              }
+            }
+          }
+          t[index] = null;
+          cascadedTagInstances.set(tagName, t);
+        } else {
+          if (tag.ref.parentNode) {
+            tag.ref.parentNode.removeChild(tag.ref);
+          }
+        }
+      }
+    }
+  };
+  if (isServer) {
+    actions.addServerTag = tagDesc => {
+      const {
+        tags = []
+      } = props;
+      // tweak only cascading tags
+      if (cascadingTags.indexOf(tagDesc.tag) !== -1) {
+        const index = tags.findIndex(prev => {
+          const prevName = prev.props.name || prev.props.property;
+          const nextName = tagDesc.props.name || tagDesc.props.property;
+          return prev.tag === tagDesc.tag && prevName === nextName;
+        });
+        if (index !== -1) {
+          tags.splice(index, 1);
+        }
+      }
+      tags.push(tagDesc);
+    };
+    if (Array.isArray(props.tags) === false) {
+      throw Error("tags array should be passed to <MetaProvider /> in node");
+    }
+  }
+  return createComponent$1(MetaContext.Provider, {
+    value: actions,
+    get children() {
+      return props.children;
+    }
+  });
+};
+const MetaTag = (tag, props) => {
+  const id = createUniqueId();
+  const c = useContext(MetaContext);
+  if (!c) throw new Error("<MetaProvider /> should be in the tree");
+  useHead({
+    tag,
+    props,
+    id,
+    get name() {
+      return props.name || props.property;
+    }
+  });
+  return null;
+};
+function useHead(tagDesc) {
+  const {
+    addClientTag,
+    removeClientTag,
+    addServerTag
+  } = useContext(MetaContext);
+  createRenderEffect(() => {
+    if (!isServer) {
+      let index = addClientTag(tagDesc);
+      onCleanup(() => removeClientTag(tagDesc, index));
+    }
+  });
+  if (isServer) {
+    addServerTag(tagDesc);
+    return null;
+  }
+}
+function renderTags(tags) {
+  return tags.map(tag => {
+    const keys = Object.keys(tag.props);
+    const props = keys.map(k => k === "children" ? "" : ` ${k}="${tag.props[k]}"`).join("");
+    return tag.props.children ? `<${tag.tag} data-sm="${tag.id}"${props}>${
+    // Tags might contain multiple text children:
+    //   <Title>example - {myCompany}</Title>
+    Array.isArray(tag.props.children) ? tag.props.children.join("") : tag.props.children}</${tag.tag}>` : `<${tag.tag} data-sm="${tag.id}"${props}/>`;
+  }).join("");
+}
+const Title = props => MetaTag("title", props);
+
+function RouteWrapper(Comp) {
+  return () => {
+    const routeData = useRouteData();
+    const props = createMemo(() => routeData());
+    return createComponent$1(Show, {
+      get when() {
+        return props();
+      },
+      keyed: true,
+      get children() {
+        return createComponent$1(Comp, mergeProps(props));
+      }
+    });
+  };
+}
+
+var styles = {"title":"Home-module_title__udMBA","container":"Home-module_container__5j5CX","container_inner":"Home-module_container_inner__tXFEO","post":"Home-module_post__eGNu2","post_title":"Home-module_post_title__y7Hbj","post_description":"Home-module_post_description__v1aos","post_img":"Home-module_post_img__WubwV","post_bottom":"Home-module_post_bottom__zK-El"};
+
+const _tmpl$$3 = ["<button", ">Add New</button>"],
+  _tmpl$2$1 = ["<div", "><!--#-->", "<!--/--><div", ">", "</div><div style=\"", "\">", "</div></div>"],
+  _tmpl$3$1 = ["<div", "><img", " src=\"/placeholder.jpg\"><div", "><h1", ">", "</h1><p", ">", "</p></div></div>"];
+function Home(props) {
+  return ssr(_tmpl$2$1, ssrHydrationKey() + ssrAttribute("class", escape(styles.container, true), false), escape(createComponent$1(Title, {
+    children: "Home Page"
+  })), ssrAttribute("class", escape(styles.container_inner, true), false), escape(createComponent$1(For, {
+    each: props,
+    children: item => ssr(_tmpl$3$1, ssrHydrationKey() + ssrAttribute("class", escape(styles.post, true), false), ssrAttribute("class", escape(styles.post_img, true), false), ssrAttribute("class", escape(styles.post_bottom, true), false), ssrAttribute("class", escape(styles.post_title, true), false), escape(item.title), ssrAttribute("class", escape(styles.post_description, true), false), escape(item.description))
+  })), "margin:" + "4rem 0", escape(createComponent$1(Link, {
+    href: "/add",
+    get children() {
+      return ssr(_tmpl$$3, ssrHydrationKey());
+    }
+  })));
+}
+var Home$1 = RouteWrapper(Home);
+
+var Home$2 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    default: Home$1
+});
+
+const _tmpl$$2 = ["<div", "><!--#-->", "<!--/--><h1>", "</h1><p>", "</p><p>", "</p><!--#-->", "<!--/--></div>"];
+function Post$1(p) {
+  return ssr(_tmpl$$2, ssrHydrationKey(), escape(createComponent$1(Title, {
+    get children() {
+      return ["Post - ", p.title];
+    }
+  })), escape(p.title), escape(p.description), p.html, escape(createComponent$1(Link, {
+    href: "/",
+    children: "Back"
+  })));
+}
+var Post$2 = RouteWrapper(Post$1);
+
+var Post$3 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    default: Post$2
+});
+
+const _tmpl$$1 = ["<div", "><div class=\"field-row-stacked\" style=\"width: 200px\"><label for=\"text18\">Id</label><input", " id=\"text18\" type=\"text\"></div><div class=\"field-row-stacked\" style=\"width: 200px\"><label for=\"text18\">Title</label><input", " id=\"text18\" type=\"text\"></div><div class=\"field-row-stacked\" style=\"width: 200px\"><label for=\"text19\">Description</label><input", " id=\"text19\" type=\"text\"></div><div class=\"field-row-stacked\" style=\"width: 200px\"><label for=\"text20\">HTML</label><textarea", " id=\"text20\" rows=\"8\"></textarea></div><button style=\"", "\">Submit</button><div>", "</div></div>"];
+function Add$1() {
+  const [id, setId] = createSignal("");
+  const [title, setTitle] = createSignal("");
+  const [description, setDescription] = createSignal("");
+  const [html, setHtml] = createSignal("");
+  useNavigate();
+  useHydration();
+  return ssr(_tmpl$$1, ssrHydrationKey(), ssrAttribute("value", escape(id(), true), false), ssrAttribute("value", escape(title(), true), false), ssrAttribute("value", escape(description(), true), false), ssrAttribute("value", escape(html(), true), false), "margin:" + "2rem 0", escape(createComponent$1(Link, {
+    href: "/",
+    children: "Back"
+  })));
+}
+
+var Add$2 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    default: Add$1
+});
+
+const _tmpl$ = ["<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"stylesheet\" href=\"/js/css/styles-v1.css\">", "", "</head>"],
+  _tmpl$2 = ["<script", " id=\"SSR_DATA\" type=\"application/json\">", "</script>"],
+  _tmpl$3 = ["<script", " type=\"module\" src=\"/js/index-v1.js\" async></script>"],
+  _tmpl$4 = ["<html", " lang=\"en\">", "<body><div id=\"app\">", "</div></body><!--#-->", "<!--/--></html>"];
+/**
+ * Checking isServer to prevent code splitting on the server, not needed unless you have large or a ton of routes
+ */
+const HomePage = isServer ? Home$1 : lazy(() => Promise.resolve().then(function () { return Home$2; }));
+const PostPage = isServer ? Post$2 : lazy(() => Promise.resolve().then(function () { return Post$3; }));
+const AddPage = isServer ? Add$1 : lazy(() => Promise.resolve().then(function () { return Add$2; }));
+function Entrypoint() {
+  const ctx = useHydration();
+  const tags = [];
+  const App = createComponent$1(MetaProvider, {
+    tags: tags,
+    get children() {
+      return createComponent$1(Router, {
+        get url() {
+          return ctx.hydratedData.url;
+        },
+        get children() {
+          return createComponent$1(Suspense, {
+            get children() {
+              return createComponent$1(Routes, {
+                get children() {
+                  return [createComponent$1(Route, {
+                    path: "/",
+                    data: HomeData,
+                    component: HomePage
+                  }), createComponent$1(Route, {
+                    path: "/add",
+                    component: AddPage
+                  }), createComponent$1(Route, {
+                    path: "/post/:id",
+                    data: PostData,
+                    component: PostPage
+                  })];
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+  return ssr(_tmpl$4, ssrHydrationKey(), createComponent$1(NoHydration, {
+    get children() {
+      return ssr(_tmpl$, escape(createComponent$1(Assets, {
+        get children() {
+          return renderTags(tags);
+        }
+      })), escape(createComponent$1(HydrationScript, {})));
+    }
+  }), escape(App), escape(createComponent$1(NoHydration, {
+    get children() {
+      return [ssr(_tmpl$2, ssrHydrationKey(), escape(JSON.stringify(ctx.hydratedData))), ssr(_tmpl$3, ssrHydrationKey())];
+    }
+  })));
+}
+function EntrypointWrapper(p) {
+  return createComponent$1(HydrationProvider, {
+    get props() {
+      return p.props;
+    },
+    get url() {
+      return p.url;
+    },
+    get children() {
+      return createComponent$1(Entrypoint, {});
+    }
+  });
+}
+
+async function fetchPosts() {
+  console.log("!!! FETCHING POSTS !!!");
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${GRAPHCMS_API_KEY}`);
+  myHeaders.append("Content-Type", "application/json");
+  const graphql = JSON.stringify({
+    query: `
+query QueryPosts {
+  posts {
+    title
+    postId
+    html
+    description
+  }
+}
+`,
+    variables: {}
+  });
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: graphql,
+    redirect: 'follow',
+    cf: {
+      cacheEverything: false,
+      cacheTtl: 0
+    }
+  };
+  try {
+    const Response = await fetch(GRAPHCMS_CONTENT_ENDPOINT, requestOptions);
+    const Json = await Response.json();
+    if (Json && Json.data && Json.data.posts) {
+      return Json.data.posts;
+    }
+    return [];
+  } catch (err) {
+    return [];
+  }
+}
+
+// export const EDGE_CACHE_TTL = 5
+const BROWSER_CACHE_TTL = 0;
+
+const INDEX_API_RESPONSE_CACHE_KEY = "/?api_response";
+async function IndexPage(request, event) {
+  const CachedResult = await CACHE_KV.get(INDEX_API_RESPONSE_CACHE_KEY);
+  const URI = new URL(request.url);
+  const API_RESPONSE = CachedResult && JSON.parse(CachedResult) || (await fetchPosts());
+  if (!CachedResult) {
+    event.waitUntil(CACHE_KV.put(INDEX_API_RESPONSE_CACHE_KEY, JSON.stringify(API_RESPONSE)));
+  }
+  const Props = {
+    props: API_RESPONSE.map(i => ({
+      id: i.postId,
+      html: i.html,
+      title: i.title,
+      description: i.description
+    }))
+  };
+  if (URI.pathname == "/index.props.json") {
+    console.log(`Responded with home page props`);
+    return new Response(JSON.stringify(Props), {
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": `no-cache, no-store, max-age=${BROWSER_CACHE_TTL}, must-revalidate`,
+        "X-Cf-Kv-Cache-Status": CachedResult ? "HIT" : "MISS"
+      },
+      status: 200
+    });
+  }
+  const html = await renderToStringAsync(() => createComponent$1(EntrypointWrapper, {
+    url: "/",
+    props: Props
+  }));
+  console.log(`Responded with home page html page`);
+  return new Response(`<!DOCTYPE html>` + html, {
+    headers: {
+      "Content-Type": "text/html",
+      "Cache-Control": `no-cache, no-store, max-age=${BROWSER_CACHE_TTL}, must-revalidate`,
+      "X-Cf-Kv-Cache-Status": CachedResult ? "HIT" : "MISS"
+    },
+    status: 200
+  });
+}
+
+async function fetchPostById(id) {
+  console.log("!!! FETCHING POST BY ID !!!");
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${GRAPHCMS_API_KEY}`);
+  myHeaders.append("Content-Type", "application/json");
+  const graphql = JSON.stringify({
+    query: `
+query QueryPosts($id: String) {
+  post:apiPosts(where: {postId: $id}) {
+    id
+    html
+    description
+    postId
+    title
+  }
+}
+`,
+    variables: {
+      id
+    }
+  });
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: graphql,
+    redirect: 'follow',
+    cf: {
+      cacheEverything: false,
+      cacheTtl: 0
+    }
+  };
+  try {
+    const Response = await fetch(GRAPHCMS_CONTENT_ENDPOINT, requestOptions);
+    const Json = await Response.json();
+    if (Json && Json.data && Json.data.post) {
+      return Json.data.post;
+    }
+    return null;
+  } catch (err) {
+    return null;
+  }
+}
+
+const POST_API_RESPONSE_CACHE_KEY = uuid => `/post/${uuid}?api_response`;
+async function Post(request, event) {
+  if (request.params == null || !request.params.id) return new Response("No post id param received!", {
+    status: 400
+  });
+  const IsPropsNavigate = request.params.id.endsWith(".props.json");
+  if (IsPropsNavigate) request.params.id = request.params.id.slice(0, request.params.id.length - ".props.json".length);
+  const ID = request.params.id;
+  if (ID.length < 1) return new Response(null, {
+    status: 400
+  });
+  const CACHE_KEY = POST_API_RESPONSE_CACHE_KEY(ID);
+  const CachedResult = await CACHE_KV.get(CACHE_KEY);
+  const Post = CachedResult && JSON.parse(CachedResult) || (await fetchPostById(ID));
+  if (!Post) return new Response(null, {
+    status: 404
+  });
+  if (!CachedResult) {
+    event.waitUntil(CACHE_KV.put(CACHE_KEY, JSON.stringify(Post)));
+  }
+  const Props = {
+    props: Post
+  };
+  if (IsPropsNavigate) {
+    console.log(`Responded to ${ID} post props`);
+    return new Response(JSON.stringify(Props), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": `no-cache, no-store, max-age=${BROWSER_CACHE_TTL}, must-revalidate`,
+        "X-Cf-Kv-Cache-Status": CachedResult ? "HIT" : "MISS"
+      }
+    });
+  }
+  const html = await renderToStringAsync(() => createComponent$1(EntrypointWrapper, {
+    props: Props,
+    url: `/post/${ID}`
+  }));
+  console.log(`Responded to ${ID} html page`);
+  return new Response(`<!DOCTYPE html>` + html, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/html",
+      "Cache-Control": `no-cache, no-store, max-age=${BROWSER_CACHE_TTL}, must-revalidate`,
+      "X-Cf-Kv-Cache-Status": CachedResult ? "HIT" : "MISS"
+    }
+  });
+}
+
+async function Add(request) {
+  const html = await renderToStringAsync(() => createComponent$1(EntrypointWrapper, {
+    url: "/add",
+    props: {}
+  }));
+  console.log(`Responded to add html page`);
+  return new Response(`<!DOCTYPE html>` + html, {
+    headers: {
+      "Content-Type": "text/html",
+      "Cache-Control": "max-age: 120"
+    },
+    status: 200
+  });
+}
+
+async function Invalidate(request, event) {
+  const Payload = await request.json();
+  const ID = Payload.data.postId;
+  console.log(ID);
+  event.waitUntil(Promise.all([CACHE_KV.delete(INDEX_API_RESPONSE_CACHE_KEY), CACHE_KV.delete(POST_API_RESPONSE_CACHE_KEY(ID))]));
+  return new Response(null, {
+    status: 200
+  });
+}
+
+const router = e();
+router.get("/$", IndexPage).get("/index.props.json", IndexPage);
+router.get("/post/:id", Post);
+router.get("/add", Add);
+router.post("/api/invalidate", Invalidate);
+router.get("*", () => {
+  return new Response("404 Not found", {
+    status: 404
+  });
+});
+addEventListener("fetch", event => {
+  event.respondWith(router.handle(event.request, event));
+});

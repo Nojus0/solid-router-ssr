@@ -8,7 +8,7 @@ const HydrationContext = createContext<HydrationContext>({hydratedData: {props: 
 export const useHydration = () => useContext<HydrationContext>(HydrationContext)
 
 export function HydrationProvider(p: IHydrationData & { children: any }) {
-
+    console.log(isServer)
     if (!isServer) {
         const Element = document.getElementById("SSR_DATA")
         if (Element == null || Element.textContent == null) throw new Error("Element or Element text null")
@@ -34,7 +34,7 @@ export function HydrationProvider(p: IHydrationData & { children: any }) {
         const value: HydrationContext = {
             hydratedData: {
                 url: p.url,
-                props: p.props.props // Close your eyes please
+                props: p.props // Close your eyes please
             },
             routeCache: new Map([])
         }
