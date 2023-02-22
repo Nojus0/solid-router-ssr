@@ -31,7 +31,7 @@ async function createDevServer() {
         }
 
         const {handler} = await vite.ssrLoadModule(path.join(process.cwd(), "./handler.js"));
-        const doc = await vite.ssrLoadModule(path.join(process.cwd(), "../core/app/src/Document.tsx"));
+        const doc = await vite.ssrLoadModule(path.join(process.cwd(), "../../core/app/src/Document.tsx"));
 
         const render = (props: any) => renderToStringAsync(() => createComponent(doc.default, props))
 

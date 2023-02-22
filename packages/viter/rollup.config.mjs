@@ -11,7 +11,7 @@ const IsProd = process.env.NODE_ENV === 'PROD'
 
 /** @type {import('rollup').RollupOptions} */
 const Config = {
-    input: "index.js",
+    input: "index.ts",
     output: [
         {
             dir: "dist",
