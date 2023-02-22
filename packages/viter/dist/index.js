@@ -13,7 +13,7 @@ async function createDevServer() {
         server: {
             middlewareMode: true,
         },
-        root: path.join(path.dirname(""), "../core/app/src"),
+        root: path.join(path.dirname(""), "../../core/app/src"),
         appType: "custom"
     });
     app.use(vite.middlewares);
